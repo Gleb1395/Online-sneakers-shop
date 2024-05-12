@@ -6,7 +6,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-INSTALLED_APPS += []  # NOQA
+INSTALLED_APPS += ["django_extensions"]  # NOQA
 
 DATABASES = {
     "default": {
@@ -16,3 +16,8 @@ DATABASES = {
 }
 
 STATIC_URL = "static/"
+
+GRAPH_MODELS = {
+    "all_applications": True,
+    "group_models": True,
+}
