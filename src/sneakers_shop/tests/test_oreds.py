@@ -2,17 +2,15 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from sneakers_shop.models import Orders
+from sneakers_shop.tests.test_create_user import TestCreateUser
 
 
 class TestOreds(TestCase):
     def setUp(self):
+        test_user = TestCreateUser()
+        test_user.setUp()
         self.order = Orders()
-        self.user = get_user_model().objects.create_user(
-            first_name="test",
-            last_name="test2",
-            email="test@example.com",
-            password="123456789",
-        )
+        self.user = test_user.user
         self.order_date = "2020-05-21"
         self.order_status = True
         Orders.objects.create(user=self.user)
@@ -36,3 +34,5 @@ class TestOreds(TestCase):
 
         for order in orders:
             self.assertEqual(order.user, self.user)
+
+
