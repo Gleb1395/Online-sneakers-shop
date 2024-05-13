@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from sneakers_shop.models import Orders, OrderDetail, Sneakers
+from sneakers_shop.models import OrderDetail, Orders, Sneakers
 from sneakers_shop.tests.test_create_user import TestCreateUser
 
 

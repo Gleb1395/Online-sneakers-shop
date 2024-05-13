@@ -34,5 +34,3 @@ class TestOreds(TestCase):
 
         for order in orders:
             self.assertEqual(order.user, self.user)
-
-

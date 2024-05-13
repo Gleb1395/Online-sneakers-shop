@@ -1,5 +1,5 @@
-
 from django.test import TestCase
+
 from sneakers_shop.models import OrderDetail, Orders
 from sneakers_shop.tests.test_create_user import TestCreateUser
 
@@ -12,9 +12,7 @@ class TestOrderDetail(TestCase):
         self.order_detail = OrderDetail()
         self.order = Orders.objects.create(user=self.user)
         self.quantity = 2
-        self.price = 123.
-
-
+        self.price = 123.0
 
     def test_check_add_order_detail(self):
         OrderDetail.objects.create(
@@ -50,5 +48,3 @@ class TestOrderDetail(TestCase):
         self.assertEqual(OrderDetail.objects.count(), 3)
         OrderDetail.objects.first().delete()
         self.assertEqual(OrderDetail.objects.count(), 2)
-
-
