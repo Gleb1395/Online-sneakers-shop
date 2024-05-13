@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from sneakers_shop.models import OrderDetail, Orders
 from sneakers_shop.tests.test_create_user import TestCreateUser
-
+# Some changes
 
 class TestOrderDetail(TestCase):
     def setUp(self):
