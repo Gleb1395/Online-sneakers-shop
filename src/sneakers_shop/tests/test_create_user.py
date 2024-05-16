@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
+# Some changes
+
 
 class TestCreateUser(TestCase):
     def setUp(self):
