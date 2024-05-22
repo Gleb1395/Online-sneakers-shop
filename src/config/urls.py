@@ -18,6 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from sneakers_shop.views import AboutView, IndexView, ShopDetailView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", IndexView.as_view(), name="index"),
+    path("about/", AboutView.as_view(), name="about"),
+    path("detail/", ShopDetailView.as_view(), name="detail"),
 ]
