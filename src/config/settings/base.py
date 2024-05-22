@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'rest_framework',
     "phonenumber_field",
     "accounts",
     "api",
@@ -88,6 +89,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False # I'll change it a little later
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

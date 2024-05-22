@@ -1,3 +1,5 @@
 from django.contrib import admin
+from sneakers_shop.models import Orders, OrderDetail, Sneakers, SneakersCategories, Payments, Carts
 
-# Register your models here.
+
+admin.site.register([Orders, OrderDetail, Sneakers, SneakersCategories, Payments, Carts])
