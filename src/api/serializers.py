@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import ModelSerializer, ListSerializer
-
+from rest_framework.serializers import ListSerializer, ModelSerializer
 
 # class CustomerSerializer(ModelSerializer):
 #     class Meta:
@@ -11,4 +10,4 @@ from rest_framework.serializers import ModelSerializer, ListSerializer
 class OrderDetailsSerializer(ListSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'order', 'quantity', 'price')
+        fields = ("id", "order", "quantity", "price")

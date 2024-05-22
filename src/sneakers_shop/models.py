@@ -1,5 +1,5 @@
-from datetime import date
 import random
+from datetime import date
 
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
@@ -21,9 +21,8 @@ class Orders(models.Model):
         for i in range(count):
             order = Orders.objects.create(
                 user=get_user_model().objects.get(id=1),
-                order_date=faker.date_between(start_date=date(2020, 5, 13),
-                                              end_date=date(2023, 5, 13)),
-                order_status=True
+                order_date=faker.date_between(start_date=date(2020, 5, 13), end_date=date(2023, 5, 13)),
+                order_status=True,
             )
             order.save()
 
@@ -38,7 +37,6 @@ class OrderDetail(models.Model):
 
     @classmethod
     def create_order_detail(cls, count):
-        faker = Faker()
         for i in range(count):
             order_detail = OrderDetail.objects.create(
                 order=Orders.objects.get(id=1),
@@ -49,9 +47,13 @@ class OrderDetail(models.Model):
 
 
 class Sneakers(models.Model):
-    order_detail = models.ForeignKey(to="sneakers_shop.OrderDetail", related_name="sneakers", blank=True, null=True,
-                                     on_delete=models.CASCADE,
-                                     )
+    order_detail = models.ForeignKey(
+        to="sneakers_shop.OrderDetail",
+        related_name="sneakers",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
     size_sneakers = models.PositiveSmallIntegerField(blank=True, null=True)
     color_sneakers = models.CharField(max_length=120, blank=True, null=True)
     model_sneakers = models.CharField(max_length=120, blank=True, null=True)

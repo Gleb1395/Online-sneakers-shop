@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -66,8 +66,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
                 last_name=faker.last_name(),
                 email=faker.email(),
                 phone_number=faker.phone_number(),
-                date_joined=faker.date_between(start_date=date(2020, 5, 13),
-                                               end_date=date(2023, 5, 13)),
+                date_joined=faker.date_between(start_date=date(2020, 5, 13), end_date=date(2023, 5, 13)),
                 birth_date=faker.date_of_birth(minimum_age=16, maximum_age=60),
             )
             client.save()

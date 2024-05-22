@@ -10,5 +10,6 @@ from rest_framework.viewsets import ModelViewSet
 #     queryset = get_user_model().objects.all()
 #     serializer_class = CustomerSerializer
 
+
 class OrderDetailsViewSet(ListAPIView):
     queryset = get_user_model().objects.all()
