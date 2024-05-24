@@ -2,11 +2,16 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from api.views import ClientCreateAPIView, ClientRetrieveDestroyAPIView, ClientRetrieveUpdateAPIView, ClientListAPIView, \
-    OrderCreateAPIView, OrderRetrieveDestroyAPIView, OrderRetrieveUpdateAPIView, OrderListAPIView, \
-    OrderDetailListAPIView, OrderDetailRetrieveUpdateAPIView, OrderDetailRetrieveDestroyAPIView, \
-    OrderDetailCreateAPIView, SneakersCreateAPIView, SneakersRetrieveDestroyAPIView, SneakersRetrieveUpdateAPIView, \
-    SneakersListAPIView
+from api.views import (ClientCreateAPIView, ClientListAPIView,
+                       ClientRetrieveDestroyAPIView,
+                       ClientRetrieveUpdateAPIView, OrderCreateAPIView,
+                       OrderDetailCreateAPIView, OrderDetailListAPIView,
+                       OrderDetailRetrieveDestroyAPIView,
+                       OrderDetailRetrieveUpdateAPIView, OrderListAPIView,
+                       OrderRetrieveDestroyAPIView, OrderRetrieveUpdateAPIView,
+                       SneakersCreateAPIView, SneakersListAPIView,
+                       SneakersRetrieveDestroyAPIView,
+                       SneakersRetrieveUpdateAPIView)
 from sneakers_shop.views import AboutView, IndexView, ShopDetailView
 
 app_name = "api"
@@ -26,11 +31,10 @@ router.register("delete-order-detail", OrderDetailRetrieveDestroyAPIView, basena
 router.register("update-order-detail", OrderDetailRetrieveUpdateAPIView, basename="update_order_detail")
 router.register("list-orders-detail", OrderDetailListAPIView, basename="list_orders_detail")
 
-router.register('create-sneakers', SneakersCreateAPIView, basename="create_sneakers")
-router.register('delete-sneakers', SneakersRetrieveDestroyAPIView, basename="delete_sneakers")
-router.register('update-sneakers', SneakersRetrieveUpdateAPIView, basename="update_sneakers")
-router.register('list-sneakers', SneakersListAPIView, basename="list_sneakers")
-
+router.register("create-sneakers", SneakersCreateAPIView, basename="create_sneakers")
+router.register("delete-sneakers", SneakersRetrieveDestroyAPIView, basename="delete_sneakers")
+router.register("update-sneakers", SneakersRetrieveUpdateAPIView, basename="update_sneakers")
+router.register("list-sneakers", SneakersListAPIView, basename="list_sneakers")
 
 
 urlpatterns = [
