@@ -1,13 +1,27 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import ListSerializer, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
-# class CustomerSerializer(ModelSerializer):
-#     class Meta:
-#         model = get_user_model()
-#         fields = ['first_name', 'last_name', 'email', "is_staff", "is_active"]
+from sneakers_shop.models import Orders, OrderDetail, Sneakers
 
 
-class OrderDetailsSerializer(ListSerializer):
+class CustomerSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "order", "quantity", "price")
+        fields = ['first_name', 'last_name', 'email', "is_staff", "is_active"]
+
+class OrdersSerializer(ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ['user', 'order_date', 'order_status']
+
+class OrderDetailsSerializer(ModelSerializer):
+    class Meta:
+        model = OrderDetail
+        fields = ['order', 'quantity', 'price']
+
+class SneakersSerializer(ModelSerializer):
+    class Meta:
+        model = Sneakers
+        fields = ['order_detail', 'size_sneakers', 'color_sneakers', 'brand_sneakers', 'price_sneakers']
+
+
