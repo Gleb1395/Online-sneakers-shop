@@ -39,5 +39,5 @@ router.register("list-sneakers", SneakersListAPIView, basename="list_sneakers")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("api-auth/", include("rest_framework.urls")),
+    path("auth/", include("djoser.urls.jwt")),
 ]
