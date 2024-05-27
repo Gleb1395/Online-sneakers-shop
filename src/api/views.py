@@ -4,6 +4,7 @@ from rest_framework import mixins, viewsets
 from api.serializers import (CustomerSerializer, OrderDetailsSerializer,
                              OrdersSerializer, SneakersSerializer)
 from sneakers_shop.models import OrderDetail, Orders, Sneakers
+#---
 
 
 class ClientCreateAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
