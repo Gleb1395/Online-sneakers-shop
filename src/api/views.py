@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from api.permissions import IsSuperUser
 from api.serializers import (CustomerSerializer, OrderDetailsSerializer,
                              OrdersSerializer, SneakersSerializer)
 from sneakers_shop.models import OrderDetail, Orders, Sneakers
-#---
 
 
 class ClientCreateAPIView(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -23,6 +24,7 @@ class ClientRetrieveUpdateAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelM
 
 
 class ClientListAPIView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
     queryset = get_user_model().objects.all()
     serializer_class = CustomerSerializer
 
@@ -83,5 +85,11 @@ class SneakersRetrieveUpdateAPIView(mixins.RetrieveModelMixin, mixins.UpdateMode
 
 
 class SneakersListAPIView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
+    queryset = Sneakers.objects.all()
+    serializer_class = SneakersSerializer
+
+
+class SneakersDetailAPIView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Sneakers.objects.all()
     serializer_class = SneakersSerializer
