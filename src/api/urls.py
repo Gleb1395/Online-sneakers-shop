@@ -9,8 +9,8 @@ from api.views import (ClientCreateAPIView, ClientListAPIView,
                        OrderDetailRetrieveDestroyAPIView,
                        OrderDetailRetrieveUpdateAPIView, OrderListAPIView,
                        OrderRetrieveDestroyAPIView, OrderRetrieveUpdateAPIView,
-                       SneakersCreateAPIView, SneakersListAPIView,
-                       SneakersRetrieveDestroyAPIView,
+                       SneakersCreateAPIView, SneakersDetailAPIView,
+                       SneakersListAPIView, SneakersRetrieveDestroyAPIView,
                        SneakersRetrieveUpdateAPIView)
 from sneakers_shop.views import AboutView, IndexView, ShopDetailView
 
@@ -35,9 +35,10 @@ router.register("create-sneakers", SneakersCreateAPIView, basename="create_sneak
 router.register("delete-sneakers", SneakersRetrieveDestroyAPIView, basename="delete_sneakers")
 router.register("update-sneakers", SneakersRetrieveUpdateAPIView, basename="update_sneakers")
 router.register("list-sneakers", SneakersListAPIView, basename="list_sneakers")
+router.register("detail-sneakers", SneakersDetailAPIView, basename="detail_sneakers")
 
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("api-auth/", include("rest_framework.urls")),
+    path("auth/", include("djoser.urls.jwt")),
 ]
