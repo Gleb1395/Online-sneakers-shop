@@ -15,7 +15,6 @@ class TestApi(TestCase):
 
     def test_sneakers(self):
         result = self.client.get(reverse("api:detail_sneakers-detail", kwargs={"pk": self.sneakers.pk}))
-        print(result.data)
         self.assertEqual(
             result.data,
             {
@@ -38,18 +37,15 @@ class TestApi(TestCase):
 
     def test_sneakers_create_valid_data(self):
         result = self.client.get(reverse("api:list_sneakers-list"))
-        print(result.data)
         self.assertEqual(result.status_code, status.HTTP_200_OK)
 
         wrong_data = {"price_sneakers": "asdasd"}
         result = self.client.post(reverse("api:create_sneakers-list"), wrong_data, format="json")
-        print(result.data)
         self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
 
     #
     def test_sneakers_delete_for_id(self):
         data_sneakers = semple_sneakers(brand_sneakers="Test sneakers brand")
-        print(data_sneakers)
         result = self.client.get(reverse("api:list_sneakers-list"))
         self.assertEqual(len(result.data), 2)
         self.client.delete(reverse("api:delete_sneakers-detail", kwargs={"pk": 1}))
