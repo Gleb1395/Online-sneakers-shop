@@ -45,7 +45,7 @@ class TestApi(TestCase):
 
     #
     def test_sneakers_delete_for_id(self):
-        data_sneakers = semple_sneakers(brand_sneakers="Test sneakers brand")
+        data_sneakers = semple_sneakers(brand_sneakers="Test sneakers brand")  # NOQA F841
         result = self.client.get(reverse("api:list_sneakers-list"))
         self.assertEqual(len(result.data), 2)
         self.client.delete(reverse("api:delete_sneakers-detail", kwargs={"pk": 1}))
