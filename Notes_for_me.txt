@@ -25,3 +25,14 @@ Docker command
 19. docker-compose build - команда используется для сборки или пересборки образов
 20. docker-compose down - стоп всех сервисов
 
+
+-------------------------------------
+1. CREATE USER admin_1 WITH PASSWORD 'admin123'; - команда для создания юзера
+2. ALTER ROLE admin_1 SET client_encoding TO 'utf8'; - добавление каких либо прав
+3. ALTER ROLE admin_1 SET client_encoding TO 'read commited'; - Эта команда устанавливает уровень изоляции транзакций
+4. ALTER ROLE admin_1 SET client_encoding TO 'UTC'; - Эта команда устанавливает таймзону
+5. CREATE DATABASE shop_test; - создание БД
+6. GRANT ALL PRIVILEGES ON DATABASE shop_test TO admin_1; - используется для предоставления всех привилегий на базу данных указанному пользователю.
+
+
+

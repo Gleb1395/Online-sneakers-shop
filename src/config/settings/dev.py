@@ -10,7 +10,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS += ["django_extensions"]  # NOQA
 
-if os.environ.get('GITHUB_WORKFLOW'):
+if os.environ.get("GITHUB_WORKFLOW"):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -23,6 +23,14 @@ if os.environ.get('GITHUB_WORKFLOW'):
     }
 else:
     DATABASES = {
+        # "default": {
+        #     "ENGINE": "django.db.backends.postgresql",
+        #     "NAME": "shop_db",
+        #     "USER": "shop_user",
+        #     "PASSWORD": "shop_user",
+        #     "HOST": "localhost",
+        #     "PORT": "5432",
+        # },
         # "default": {
         #     "ENGINE": "django.db.backends.postgresql",
         #     "NAME": os.environ.get("POSTGRES_DB"),
