@@ -1,0 +1,27 @@
+Docker command
+1. docker --version - текущая версия Docker.
+2. docker help - справка по командам Docker.
+3. docker images - список всех images.
+4. docker run "name_image" - запуск image.
+5. docker ps -a - список всех контейнеров.
+6. docker run --rm "id_container" - контейнер запускается и сразу удаляется.
+7. docker rmi "name_image" - удаление image.
+8. docker inspect "name_image" - вся мета информация об image.
+9. docker build . - создание image из текущей директории.
+10. docker build -t "name_image" - создание image со своим названием.
+11. docker run --rm -it -d "name_image" - запуск контейнера в фоновом режиме с возможностью интерактивного режима.
+12. docker logs -f "id_container" - логи в реальном времени.
+13. docker exec -it - команда используется для запуска нового процесса
+14.  docker run --rm -it --name shop_cont -p 8010:8000 image_shop -
+     docker run - запускает новый контейнер.
+            --rm - автоматически удаляет контейнер после его остановки.
+            -it - включает интерактивный режим и открывает терминал внутри контейнера.
+            --name shop_cont - задает имя контейнера shop_cont.
+            -p 8010:8000 - пробрасывает порт 8010 на хосте к порту 8000 внутри контейнера
+15. docker run --rm -it --name shop_cont -p 8010:8000 -v "D:\!!!it.hillel - Python Pro\Online-sneakers-shop\src:/shop/src" image_shop
+16. docker run --rm -it --name shop_cont -p 8010:8000 -v "D:\!!!it.hillel - Python Pro\Online-sneakers-shop\src:/shop/src" image_shop python src/manage.py runserver
+17. docker run --rm -it --name shop_cont -p 8010:8000 image_shop ./commands/start_server_dev.sh
+18. docker-compose up - команда используется для запуска приложений, определенных в файле
+19. docker-compose build - команда используется для сборки или пересборки образов
+20. docker-compose down - стоп всех сервисов
+
