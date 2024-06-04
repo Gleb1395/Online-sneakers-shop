@@ -1,0 +1,58 @@
+version: '3'
+#docker run --rm -it --name shop_cont -p 8010:8000 image_shop ./commands/start_server_dev.sh
+services:
+  backend:
+    build: ./
+    container_name: shop_cont
+    working_dir: /shop
+    ports:
+      - "8010:8000"
+    command:
+      - ./commands/start_server_dev.sh
+    volumes:
+      - ./src:/shop/src
+      - ./commands:/shop/commands/
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13.7
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - "5000:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - "8081:8081"
+    volumes:
+      - mongo_data:/var/lib/db
+    depends_on:
+      - postgres
+volumes:
+  pg_data: { }
+  pgadmin: { }
+  mongo_data: { }
+
+
+

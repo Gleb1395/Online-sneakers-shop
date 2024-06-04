@@ -10,12 +10,40 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS += ["django_extensions"]  # NOQA
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+if os.environ.get("GITHUB_WORKFLOW"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "0.0.0.0",
+            "PORT": 5432,
+        }
     }
-}
+else:
+    DATABASES = {
+        # "default": {
+        #     "ENGINE": "django.db.backends.postgresql",
+        #     "NAME": "shop_db",
+        #     "USER": "shop_user",
+        #     "PASSWORD": "shop_user",
+        #     "HOST": "localhost",
+        #     "PORT": "5432",
+        # },
+        # "default": {
+        #     "ENGINE": "django.db.backends.postgresql",
+        #     "NAME": os.environ.get("POSTGRES_DB"),
+        #     "USER": os.environ.get("POSTGRES_USER"),
+        #     "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        #     "HOST": os.environ.get("POSTGRES_HOST"),
+        #     "PORT": os.environ.get("POSTGRES_PORT"),
+        # },
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+        }
+    }
 
 STATIC_URL = "static/"
 # MEDIA_URL = "media/"
