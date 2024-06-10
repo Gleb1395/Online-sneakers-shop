@@ -24,7 +24,9 @@ Docker command
 18. docker-compose up - команда используется для запуска приложений, определенных в файле
 19. docker-compose build - команда используется для сборки или пересборки образов
 20. docker-compose down - стоп всех сервисов
-
+-----------------------------------------------------------------
+email my online shop - stepupsneakersshop@gmail.com
+password - v]X%bCBe3P6u4^3L>qi,
 
 -------------------------------------
 1. CREATE USER admin_1 WITH PASSWORD 'admin123'; - команда для создания юзера
