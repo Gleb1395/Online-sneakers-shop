@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView, TemplateView
 
 from sneakers_shop.models import Sneakers
 
@@ -33,6 +33,7 @@ class ShopListView(ListView):
 
 class CartListView(TemplateView):
     template_name = "cart.html"
+
 
 class PriceView(TemplateView):
     template_name = "price.html"

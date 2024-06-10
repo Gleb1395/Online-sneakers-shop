@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -23,8 +24,8 @@ from rest_framework import permissions
 
 from config.settings import dev
 from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
-                                 IndexView, ServicesView, ShopDetailView,
-                                 ShopListView, PriceView)
+                                 IndexView, PriceView, ServicesView,
+                                 ShopDetailView, ShopListView)
 
 schema_view = get_schema_view(
     openapi.Info(
