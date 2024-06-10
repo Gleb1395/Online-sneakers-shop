@@ -46,7 +46,9 @@ else:
     }
 
 STATIC_URL = "static/"
-# MEDIA_URL = "media/"
+MEDIA_ROOT = "media/"
+MEDIA_URL = "media/"
+
 
 GRAPH_MODELS = {
     "all_applications": True,
@@ -55,4 +57,5 @@ GRAPH_MODELS = {
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),  # NOQA F405
 ]
-MEDIA_ROOT = [os.path.join(BASE_DIR, "media")]  # NOQA F405
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+  # NOQA F405

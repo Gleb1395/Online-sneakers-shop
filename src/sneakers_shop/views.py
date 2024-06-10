@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+
+from sneakers_shop.models import Sneakers
 
 
 class IndexView(TemplateView):
@@ -22,9 +24,15 @@ class ContactUsView(TemplateView):
     template_name = "contact_us.html"
 
 
-class ShopListView(TemplateView):
+class ShopListView(ListView):
+    model = Sneakers  # ????????????
     template_name = "shop.html"
+    context_object_name = "sneakers"
+    paginate_by = 9
 
 
 class CartListView(TemplateView):
     template_name = "cart.html"
+
+class PriceView(TemplateView):
+    template_name = "price.html"
