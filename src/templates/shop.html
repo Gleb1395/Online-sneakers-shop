@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet"
-		href="{% static 'css/price.css' %}"> 
+          href="{% static 'css/price.css' %}">
 
     <!-- Start Shop Page  -->
     <div class="shop-box-inner">
@@ -73,45 +73,52 @@
                                         Price
                                     </h2>
                                 </div>
-
-                                <div class="price-input-container">
-                                    <div class="price-input">
-                                        <div class="price-field">
-                                            <span>Minimum Price</span>
-                                            <input type="number"
-                                                   class="min-input"
-                                                   value="2500">
+                                <form method="post" action="{% url 'filter_prices' %}">
+                                    {% csrf_token %}
+                                    <div class="price-input-container">
+                                        <div class="price-input">
+                                            <div class="price-field">
+                                                <span>Minimum Price</span>
+                                                <input name="min_price"
+                                                       type="number"
+                                                       class="min-input"
+                                                       value="{{ min_price|default:'0' }}">
+                                            </div>
+                                            <div class="price-field">
+                                                <span>Maximum Price</span>
+                                                <input name="max_price"
+                                                       type="number"
+                                                       class="max-input"
+                                                       value="{{ max_price|default:'100' }}">
+                                            </div>
                                         </div>
-                                        <div class="price-field">
-                                            <span>Maximum Price</span>
-                                            <input type="number"
-                                                   class="max-input"
-                                                   value="8500">
+                                        <div class="slider-container">
+                                            <div class="price-slider" id="price-slider">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="slider-container">
-                                        <div class="price-slider" id="price-slider">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Slider -->
-                                <div class="range-input">
-                                    <input type="range"
-                                           class="min-range"
-                                           min="0"
-                                           max="10000"
-                                           value="2500"
-                                           step="1">
-                                    <input type="range"
-                                           class="max-range"
-                                           min="0"
-                                           max="10000"
-                                           value="8500"
-                                           step="1">
-                                </div>
+                                    <!-- Slider -->
+                                    <div class="range-input">
+                                        <input type="range"
+                                               class="min-range"
+                                               min="0"
+                                               max="1000"
+                                               value="{{ min_price|default:'0' }}"
+                                               step="1">
+                                        <input type="range"
+                                               class="max-range"
+                                               min="0"
+                                               max="1000"
+                                               value="{{ max_price|default:'100' }}"
+                                               step="1">
+                                    </div>
                             </div>
-                            <script src="{% static 'js/price.js' %}"></script> 
+                            <script src="{% static 'js/price.js' %}"></script>
+                            <div class="button-container">
+                                <button type="submit" class="btn btn-danger" style="margin-left: 200px;">Filter</button>
+                            </div>
+                            </form>
                         </div>
 
                         {#                        <div class="filter-price-left">#}
@@ -245,10 +252,12 @@
                                                         </div>
                                                         {% if product.image_sneakers %}
                                                             <img src="{{ product.image_sneakers.url }}"
-                                                                 class="img-fluid" alt="{{ product.brand_sneakers }}">
+                                                                 class="img-fluid"
+                                                                 alt="{{ product.brand_sneakers }}">
                                                         {% else %}
                                                             <img src="{% static 'images/shoes_for_shop_page_9.jpg' %}"
-                                                                 class="img-fluid" alt="{{ product.brand_sneakers }}">
+                                                                 class="img-fluid"
+                                                                 alt="{{ product.brand_sneakers }}">
                                                         {% endif %}
                                                         <div class="mask-icon">
                                                             <ul>
@@ -259,7 +268,8 @@
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
                                                                 <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right" title="Add to Wishlist"><i
+                                                                       data-placement="right"
+                                                                       title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>
                                                             </ul>
                                                             <a class="cart" href="#">Add to Cart</a>
@@ -284,7 +294,8 @@
                                                         <div class="type-lb">
                                                             <p class="new">New</p>
                                                         </div>
-                                                        <img src="images/img-pro-01.jpg" class="img-fluid" alt="Image">
+                                                        <img src="images/img-pro-01.jpg" class="img-fluid"
+                                                             alt="Image">
                                                         <div class="mask-icon">
                                                             <ul>
                                                                 <li><a href="#" data-toggle="tooltip"
@@ -294,7 +305,8 @@
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
                                                                 <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right" title="Add to Wishlist"><i
+                                                                       data-placement="right"
+                                                                       title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>
                                                             </ul>
 
@@ -309,16 +321,23 @@
                                                         <del>$ 60.00</del>
                                                         $40.79
                                                     </h5>
-                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis sapien,
-                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer vitae
-                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta, eget
+                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis
+                                                        sapien,
+                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer
+                                                        vitae
+                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta,
+                                                        eget
                                                         aliquam purus
-                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis in
-                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi purus,
+                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis
+                                                        in
+                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi
+                                                        purus,
                                                         quis euismod ex volutpat in. Vestibulum eleifend eros ac
                                                         lobortis aliquet.
-                                                        Suspendisse at ipsum vel lacus vehicula blandit et sollicitudin
-                                                        quam. Praesent vulputate semper libero pulvinar consequat. Etiam
+                                                        Suspendisse at ipsum vel lacus vehicula blandit et
+                                                        sollicitudin
+                                                        quam. Praesent vulputate semper libero pulvinar consequat.
+                                                        Etiam
                                                         ut placerat lectus.</p>
                                                     <a class="btn hvr-hover" href="#">Add to Cart</a>
                                                 </div>
@@ -333,7 +352,8 @@
                                                         <div class="type-lb">
                                                             <p class="sale">Sale</p>
                                                         </div>
-                                                        <img src="images/img-pro-02.jpg" class="img-fluid" alt="Image">
+                                                        <img src="images/img-pro-02.jpg" class="img-fluid"
+                                                             alt="Image">
                                                         <div class="mask-icon">
                                                             <ul>
                                                                 <li><a href="#" data-toggle="tooltip"
@@ -343,7 +363,8 @@
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
                                                                 <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right" title="Add to Wishlist"><i
+                                                                       data-placement="right"
+                                                                       title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>
                                                             </ul>
 
@@ -358,16 +379,23 @@
                                                         <del>$ 60.00</del>
                                                         $40.79
                                                     </h5>
-                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis sapien,
-                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer vitae
-                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta, eget
+                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis
+                                                        sapien,
+                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer
+                                                        vitae
+                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta,
+                                                        eget
                                                         aliquam purus
-                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis in
-                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi purus,
+                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis
+                                                        in
+                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi
+                                                        purus,
                                                         quis euismod ex volutpat in. Vestibulum eleifend eros ac
                                                         lobortis aliquet.
-                                                        Suspendisse at ipsum vel lacus vehicula blandit et sollicitudin
-                                                        quam. Praesent vulputate semper libero pulvinar consequat. Etiam
+                                                        Suspendisse at ipsum vel lacus vehicula blandit et
+                                                        sollicitudin
+                                                        quam. Praesent vulputate semper libero pulvinar consequat.
+                                                        Etiam
                                                         ut placerat lectus.</p>
                                                     <a class="btn hvr-hover" href="#">Add to Cart</a>
                                                 </div>
@@ -382,7 +410,8 @@
                                                         <div class="type-lb">
                                                             <p class="sale">Sale</p>
                                                         </div>
-                                                        <img src="images/img-pro-03.jpg" class="img-fluid" alt="Image">
+                                                        <img src="images/img-pro-03.jpg" class="img-fluid"
+                                                             alt="Image">
                                                         <div class="mask-icon">
                                                             <ul>
                                                                 <li><a href="#" data-toggle="tooltip"
@@ -392,7 +421,8 @@
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
                                                                 <li><a href="#" data-toggle="tooltip"
-                                                                       data-placement="right" title="Add to Wishlist"><i
+                                                                       data-placement="right"
+                                                                       title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>
                                                             </ul>
 
@@ -407,16 +437,23 @@
                                                         <del>$ 60.00</del>
                                                         $40.79
                                                     </h5>
-                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis sapien,
-                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer vitae
-                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta, eget
+                                                    <p>Integer tincidunt aliquet nibh vitae dictum. In turpis
+                                                        sapien,
+                                                        imperdiet quis magna nec, iaculis ultrices ante. Integer
+                                                        vitae
+                                                        suscipit nisi. Morbi dignissim risus sit amet orci porta,
+                                                        eget
                                                         aliquam purus
-                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis in
-                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi purus,
+                                                        sollicitudin. Cras eu metus felis. Sed arcu arcu, sagittis
+                                                        in
+                                                        blandit eu, imperdiet sit amet eros. Donec accumsan nisi
+                                                        purus,
                                                         quis euismod ex volutpat in. Vestibulum eleifend eros ac
                                                         lobortis aliquet.
-                                                        Suspendisse at ipsum vel lacus vehicula blandit et sollicitudin
-                                                        quam. Praesent vulputate semper libero pulvinar consequat. Etiam
+                                                        Suspendisse at ipsum vel lacus vehicula blandit et
+                                                        sollicitudin
+                                                        quam. Praesent vulputate semper libero pulvinar consequat.
+                                                        Etiam
                                                         ut placerat lectus.</p>
                                                     <a class="btn hvr-hover" href="#">Add to Cart</a>
                                                 </div>

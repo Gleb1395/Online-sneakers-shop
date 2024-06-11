@@ -59,7 +59,7 @@ input::-webkit-inner-spin-button {
     height: 100%;
     position: absolute;
     border-radius: 5px;
-    background: #01940b;
+    background: #d33b33;
     left: 0;
     right: 0;
 }
@@ -101,3 +101,5 @@ input::-webkit-inner-spin-button {
     top: 50%;
     transform: translateY(-115%);
 }
+
+

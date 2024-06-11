@@ -23,8 +23,9 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 from config.settings import dev
+from sneakers_shop import views
 from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
-                                 IndexView, PriceView, ServicesView,
+                                 IndexView, ServicesView,
                                  ShopDetailView, ShopListView)
 
 schema_view = get_schema_view(
@@ -53,5 +54,5 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("docs/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("price/", PriceView.as_view(), name="price"),
+    path('filter-prices/', views.get_value_filter, name='filter_prices'),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)

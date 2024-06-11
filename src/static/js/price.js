@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const priceSlider = document.getElementById("price-slider");
 
     // Set the price gap
-    let priceGap = 500;
+    let priceGap = 1;
 
     // Add event listeners to price input elements
     priceInputs.forEach((input, index) => {
@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 minPrice = 0;
             }
 
-            if (maxPrice > 10000) {
-                alert("Maximum price cannot be greater than 10000");
-                priceInputs[1].value = 10000;
-                maxPrice = 10000;
+            if (maxPrice > 1000) {
+                alert("Maximum price cannot be greater than 1000");
+                priceInputs[1].value = 1000;
+                maxPrice = 1000;
             }
 
             if (minPrice > maxPrice - priceGap) {
