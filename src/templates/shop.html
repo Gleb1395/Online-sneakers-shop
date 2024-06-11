@@ -1,8 +1,11 @@
 {% extends 'index.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
     <link rel="stylesheet"
           href="{% static 'css/price.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'css/button dropdown link.css' %}">
 
     <!-- Start Shop Page  -->
     <div class="shop-box-inner">
@@ -24,45 +27,41 @@
                                  id="list-group-men" data-children=".sub-men">
                                 <div class="list-group-collapse sub-men">
                                     <a class="list-group-item list-group-item-action" href="#sub-men1"
-                                       data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Clothing
-                                        <small class="text-muted">(100)</small>
+                                       data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Sneakers
+                                        <small class="text-muted">{{ sneakers.count }}</small>
                                     </a>
                                     <div class="collapse show" id="sub-men1" data-parent="#list-group-men">
                                         <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">T-Shirts
-                                                <small class="text-muted">(50)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">Polo T-Shirts
-                                                <small class="text-muted">(10)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">Round Neck
-                                                T-Shirts <small class="text-muted">(10)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">V Neck T-Shirts
-                                                <small class="text-muted">(10)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">Hooded T-Shirts
-                                                <small class="text-muted">(20)</small></a>
+                                            {% for shoes in unique_brands %}
+                                                
+                                            <a href="{% url 'shop' %}?brand={{ shoes }}" class="list-group-item list-group-item-action active">{{ shoes }}
+                                                <small class="text-muted">{{ brands_count|get_item:shoes}}</small></a>
+                                                    
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="list-group-collapse sub-men">
                                     <a class="list-group-item list-group-item-action" href="#sub-men2"
-                                       data-toggle="collapse" aria-expanded="false" aria-controls="sub-men2">Footwear
+                                       data-toggle="collapse" aria-expanded="false" aria-controls="sub-men2">Footwear (Не работает)
                                         <small class="text-muted">(50)</small>
                                     </a>
                                     <div class="collapse" id="sub-men2" data-parent="#list-group-men">
                                         <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action">Sports Shoes
+                                            <a href="#" class="list-group-item list-group-item-action">Sports Shoes (Не работает)
                                                 <small class="text-muted">(10)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">Sneakers <small
+                                            <a href="#" class="list-group-item list-group-item-action">Sneakers (Не работает)<small
                                                     class="text-muted">(20)</small></a>
-                                            <a href="#" class="list-group-item list-group-item-action">Formal Shoes
+                                            <a href="#" class="list-group-item list-group-item-action">Formal Shoes (Не работает)
                                                 <small class="text-muted">(20)</small></a>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#" class="list-group-item list-group-item-action"> Men <small
+                                <a href="#" class="list-group-item list-group-item-action"> Men (Не работает)<small
                                         class="text-muted">(150) </small></a>
-                                <a href="#" class="list-group-item list-group-item-action">Accessories <small
+                                <a href="#" class="list-group-item list-group-item-action">Accessories (Не работает)<small
                                         class="text-muted">(11)</small></a>
-                                <a href="#" class="list-group-item list-group-item-action">Bags <small
+                                <a href="#" class="list-group-item list-group-item-action">Bags (Не работает)<small
                                         class="text-muted">(22)</small></a>
                             </div>
                         </div>
@@ -120,84 +119,70 @@
                             </div>
                             </form>
                         </div>
-
-                        {#                        <div class="filter-price-left">#}
-                        {#                            <div class="title-left">#}
-                        {#                                <h3>Price</h3>#}
-                        {#                            </div>#}
-                        {#                            <div class="price-box-slider">#}
-                        {#                                <div id="slider-range"></div>#}
-                        {#                                <p>#}
-                        {#                                    <input type="text" id="amount" readonly#}
-                        {#                                           style="border:0; color:#fbb714; font-weight:bold;">#}
-                        {#                                    <button class="btn hvr-hover" type="submit">Filter</button>#}
-                        {#                                </p>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
                         <div class="filter-brand-left">
                             <div class="title-left">
-                                <h3>Brand</h3>
+                                <h3>Brand (Не работает)</h3>
                             </div>
                             <div class="brand-box">
                                 <ul>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios1" value="Yes" type="radio">
-                                            <label for="Radios1"> Supreme </label>
+                                            <label for="Radios1"> Supreme (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios2" value="No" type="radio">
-                                            <label for="Radios2"> A Bathing Ape </label>
+                                            <label for="Radios2"> A Bathing Ape (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios3" value="declater" type="radio">
-                                            <label for="Radios3"> The Hundreds </label>
+                                            <label for="Radios3"> The Hundreds (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios4" value="declater" type="radio">
-                                            <label for="Radios4"> Alife </label>
+                                            <label for="Radios4"> Alife (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios5" value="declater" type="radio">
-                                            <label for="Radios5"> Neighborhood </label>
+                                            <label for="Radios5"> Neighborhood (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios6" value="declater" type="radio">
-                                            <label for="Radios6"> CLOT </label>
+                                            <label for="Radios6"> CLOT (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios7" value="declater" type="radio">
-                                            <label for="Radios7"> Acapulco Gold </label>
+                                            <label for="Radios7"> Acapulco Gold (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios8" value="declater" type="radio">
-                                            <label for="Radios8"> UNDFTD </label>
+                                            <label for="Radios8"> UNDFTD (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios9" value="declater" type="radio">
-                                            <label for="Radios9"> Mighty Healthy </label>
+                                            <label for="Radios9"> Mighty Healthy (Не работает)</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="radio radio-danger">
                                             <input name="survey" id="Radios10" value="declater" type="radio">
-                                            <label for="Radios10"> Fiberops </label>
+                                            <label for="Radios10"> Fiberops (Не работает)</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -207,21 +192,16 @@
                     </div>
                 </div>
                 <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+
                     <div class="right-product-box">
                         <div class="product-item-filter row">
-                            <div class="col-12 col-sm-8 text-center text-sm-left">
-                                <div class="toolbar-sorter-right">
-                                    <span>Sort by </span>
-                                    <select id="basic" class="selectpicker show-tick form-control"
-                                            data-placeholder="$ USD">
-                                        <option data-display="Select">Nothing</option>
-                                        <option value="1">Popularity</option>
-                                        <option value="2">High Price → High Price</option>
-                                        <option value="3">Low Price → High Price</option>
-                                        <option value="4">Best Selling</option>
-                                    </select>
+                            <div class="dropdown">
+                                <button class="dropbtn">Sorted by</button>
+                                <div class="dropdown-content">
+                                    <a href="{% url 'shop' %}?sort=all">Nothing</a>
+                                    <a href="{% url 'shop' %}?sort=l2h">Low to high</a>
+                                    <a href="{% url 'shop' %}?sort=h2l">High to low</a>
                                 </div>
-                                <p>Showing all 4 results</p>
                             </div>
                             <div class="col-12 col-sm-4 text-center text-sm-right">
                                 <ul class="nav nav-tabs ml-auto">

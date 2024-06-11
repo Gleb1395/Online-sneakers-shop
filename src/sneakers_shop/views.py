@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template.defaulttags import register
 from django.views.generic import ListView, TemplateView
 
 from sneakers_shop.models import Sneakers
@@ -30,6 +31,34 @@ class ShopListView(ListView):
     template_name = "shop.html"
     context_object_name = "sneakers"
     paginate_by = 9
+
+    def get_queryset(self):
+
+        sort_by = self.request.GET.get("sort", "all")
+        brand_show_by = self.request.GET.get("brand")
+        if sort_by == "h2l":
+            return Sneakers.objects.order_by("-price_sneakers")
+        elif sort_by == "l2h":
+            return Sneakers.objects.order_by("price_sneakers")
+        if brand_show_by:
+            queryset = Sneakers.objects.filter(brand_sneakers=brand_show_by)
+            return queryset
+        return Sneakers.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        unique_brands = set()
+        brands_count = dict()
+        for shoes_brands in Sneakers.objects.all():
+            brand = shoes_brands.brand_sneakers
+            unique_brands.add(shoes_brands.brand_sneakers)
+            if brand in brands_count:
+                brands_count[brand] += 1
+            else:
+                brands_count[brand] = 1
+        context["unique_brands"] = unique_brands
+        context["brands_count"] = brands_count
+        return context
 
 
 def get_value_filter(request):
