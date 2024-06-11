@@ -11,9 +11,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS += ["django_extensions"]  # NOQA
-mongoengine.connect(
-    host="mongodb://admin:admin@mongodb:27017/mongodb_context?authSource=admin"
-)
+mongoengine.connect(host="mongodb://admin:admin@mongodb:27017/mongodb_context?authSource=admin")
 
 if os.environ.get("GITHUB_WORKFLOW"):
     DATABASES = {
