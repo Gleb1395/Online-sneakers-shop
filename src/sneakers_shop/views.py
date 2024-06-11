@@ -33,13 +33,13 @@ class ShopListView(ListView):
 
 
 def get_value_filter(request):
-    if request.method == 'POST':
-        min_price = request.POST.get('min_price')
-        max_price = request.POST.get('max_price')
+    if request.method == "POST":
+        min_price = request.POST.get("min_price")
+        max_price = request.POST.get("max_price")
         show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
-        context = {'sneakers': show_sneakers,
-                   'min_price': min_price,
-                   'max_price': max_price}
-    return render(request,"shop.html",context)
+        context = {"sneakers": show_sneakers, "min_price": min_price, "max_price": max_price}
+    return render(request, "shop.html", context)
+
+
 class CartListView(TemplateView):
-    template_name = "cart.html"
+    template_name = "cart.html"  # new comment
