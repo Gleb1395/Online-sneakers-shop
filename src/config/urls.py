@@ -39,5 +39,5 @@ urlpatterns = [
     path("docs/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("filter-prices/", views.get_value_filter, name="filter_prices"),
-    # path("blog", include(blog.urls)),
+    path("blog", include("blog.urls")),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)
