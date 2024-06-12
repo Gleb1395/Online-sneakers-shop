@@ -6,12 +6,16 @@ services:
     container_name: shop_cont
     working_dir: /shop
     ports:
-      - "8010:8000"
+      - ${LOCAL_PORT}:${WSGI_PORT}
     command:
-      - ./commands/start_server_dev.sh
+      - bash
+      - -c
+      - ./commands/start_server_${MODE}.sh
     volumes:
       - ./src:/shop/src
       - ./commands:/shop/commands/
+      - static_content:/shop/src/static
+      - media_content:/shop/src/media
     env_file:
       - .env
     depends_on:
@@ -37,22 +41,52 @@ services:
     depends_on:
       - postgres
 
-  mongo:
-    image: mongo
-    container_name: mongodb
+  mongodb:
+    image: mongo:3-stretch
+    container_name: mongo_db_container
+    ports:
+      - "27017:27017"
+    command: [ "--smallfiles" ]
+    volumes:
+      - mongo_data:/var/lib/db
     restart: on-failure
     env_file:
       - .env
-    ports:
-      - "8081:8081"
-    volumes:
-      - mongo_data:/var/lib/db
     depends_on:
       - postgres
+  mongoadmin:
+    image: mongo-express
+    restart: always
+    container_name: mongo_admin_container
+    ports:
+      - 8091:8081
+    env_file:
+      - .env
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+  ngixn:
+    image: nginx:1.19
+    volumes:
+      - static_content:/shop/src/static
+      - media_content:/shop/src/media
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+
 volumes:
   pg_data: { }
   pgadmin: { }
   mongo_data: { }
+  static_content: { }
+  media_content: { }
+
 
 
 

@@ -1,27 +1,16 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-from sneakers_shop.views import AboutView, IndexView, ShopDetailView
+import blog
+from config.settings import dev
+from sneakers_shop import views
+from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
+                                 IndexView, ServicesView, ShopDetailView,
+                                 ShopListView)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -41,8 +30,14 @@ urlpatterns = [
     path("", IndexView.as_view(), name="index"),
     path("about/", AboutView.as_view(), name="about"),
     path("detail/", ShopDetailView.as_view(), name="detail"),
+    path("service/", ServicesView.as_view(), name="service"),
+    path("contact-us/", ContactUsView.as_view(), name="contact-us"),
+    path("shop/", ShopListView.as_view(), name="shop"),
+    path("cart/", CartListView.as_view(), name="cart"),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("api.urls")),
     path("docs/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-]
+    path("filter-prices/", views.get_value_filter, name="filter_prices"),
+    path("blog", include("blog.urls")),
+] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)

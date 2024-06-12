@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <!-- Basic -->
 
 <head>
@@ -15,6 +16,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
+    <!--Price Range-->
 
     <!-- Site Icons -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
@@ -83,13 +85,13 @@
 					</select>
                     </div>
                     <div class="right-phone-box">
-                        <p>Call US :- <a href="#"> +11 900 800 100</a></p>
+                        <p>Call US :- <a href="#"> +380-111-11-11</a></p>
                     </div>
                     <div class="our-link">
                         <ul>
                             <li><a href="#">My Account</a></li>
                             <li><a href="#">Our location</a></li>
-                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="{% url 'contact-us' %}">Contact Us</a></li>
                         </ul>
                     </div>
                 </div>
@@ -97,7 +99,7 @@
         </div>
     </div>
     <!-- End Main Top -->
-{% block content %}
+
     <!-- Start Main Top -->
     <header class="main-header">
         <!-- Start Navigation -->
@@ -117,75 +119,29 @@
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
                         <li class="nav-item active"><a class="nav-link" href= "{% url "index" %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-                        <li class="dropdown megamenu-fw">
-                            <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">Product</a>
-                            <ul class="dropdown-menu megamenu-content" role="menu">
-                                <li>
-                                    <div class="row">
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Top</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="shop.html">Jackets</a></li>
-                                                    <li><a href="shop.html">Shirts</a></li>
-                                                    <li><a href="shop.html">Sweaters & Cardigans</a></li>
-                                                    <li><a href="shop.html">T-shirts</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- end col-3 -->
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Bottom</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="shop.html">Swimwear</a></li>
-                                                    <li><a href="shop.html">Skirts</a></li>
-                                                    <li><a href="shop.html">Jeans</a></li>
-                                                    <li><a href="shop.html">Trousers</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- end col-3 -->
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Clothing</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="shop.html">Top Wear</a></li>
-                                                    <li><a href="shop.html">Party wear</a></li>
-                                                    <li><a href="shop.html">Bottom Wear</a></li>
-                                                    <li><a href="shop.html">Indian Wear</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Accessories</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="shop.html">Bags</a></li>
-                                                    <li><a href="shop.html">Sunglasses</a></li>
-                                                    <li><a href="shop.html">Fragrances</a></li>
-                                                    <li><a href="shop.html">Wallets</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- end col-3 -->
-                                    </div>
-                                    <!-- end row -->
-                                </li>
+                        <li class="dropdown">
+                            <a href="{% url 'shop' %}" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">Product</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'shop' %}">Sporty sneakers</a></li>
+                                <li><a href="{% url 'shop' %}">Trendy sneakers</a></li>
+                                <li><a href="{% url 'shop' %}">Fashion sneakers</a></li>
+                                <li><a href="{% url 'shop' %}">Casual</a></li>
+                                <li><a href="{% url 'shop' %}">Athletic footwear</a></li>
+                                <li><a href="{% url 'shop' %}">Running shoes</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                             <ul class="dropdown-menu">
-                                <li><a href="cart.html">Cart</a></li>
+                                <li><a href="{% url "cart" %}">Cart</a></li>
                                 <li><a href="checkout.html">Checkout</a></li>
                                 <li><a href="my-account.html">My Account</a></li>
                                 <li><a href="wishlist.html">Wishlist</a></li>
                                 <li><a href="detail.html">Shop Detail</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="service.html">Our Service</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'service'%}">Our Service</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "contact-us" %}">Contact Us</a></li>
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -208,17 +164,17 @@
                 <li class="cart-box">
                     <ul class="cart-list">
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-01.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/sneakers_for_index_page_1.jpg' %}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Delica omtantur </a></h6>
                             <p>1x - <span class="price">$80.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-02.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/sneakers_for_index_page_2.jpg' %}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Omnes ocurreret</a></h6>
                             <p>1x - <span class="price">$60.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-03.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/sneakers_for_index_page_3.jpg' %}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Agam facilisis</a></h6>
                             <p>1x - <span class="price">$40.00</span></p>
                         </li>
@@ -246,7 +202,7 @@
         </div>
     </div>
     <!-- End Top Search -->
-
+{% block content %}
     <!-- Start Slider -->
     <div id="slides-shop" class="cover-slides">
         <ul class="slides-container">
@@ -340,7 +296,7 @@
                 <div class="col-lg-12">
                     <div class="title-all text-center">
                         <h1>Featured Products</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                        <p>Discover our exclusive selection of top sneakers, perfect for your style and comfort. Choose from the latest models and popular brands.</p>
                     </div>
                 </div>
             </div>
@@ -363,7 +319,7 @@
                             <div class="type-lb">
                                 <p class="sale">Sale</p>
                             </div>
-                            <img src="{% static 'images/img-pro-01.jpg' %}" class="img-fluid" alt="Image">
+                            <img src="{% static 'images/sneakers_for_index_page_1.jpg' %}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
                                 <ul>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -386,7 +342,7 @@
                             <div class="type-lb">
                                 <p class="new">New</p>
                             </div>
-                            <img src="{% static 'images/img-pro-02.jpg' %}" class="img-fluid" alt="Image">
+                            <img src="{% static 'images/sneakers_for_index_page_2.jpg' %}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
                                 <ul>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -409,7 +365,7 @@
                             <div class="type-lb">
                                 <p class="sale">Sale</p>
                             </div>
-                            <img src="{% static 'images/img-pro-03.jpg' %}" class="img-fluid" alt="Image">
+                            <img src="{% static 'images/sneakers_for_index_page_3.jpg' %}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
                                 <ul>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -432,7 +388,7 @@
                             <div class="type-lb">
                                 <p class="sale">Sale</p>
                             </div>
-                            <img src="{% static 'images/img-pro-04.jpg' %}" class="img-fluid" alt="Image">
+                            <img src="{% static 'images/sneakers_for_index_page_4.jpg' %}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
                                 <ul>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -460,7 +416,7 @@
                 <div class="col-lg-12">
                     <div class="title-all text-center">
                         <h1>latest blog</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                        <p>Stay updated with our latest posts on sneaker trends, styling tips, and the newest releases in the sneaker world. Don't miss out on expert insights and exciting news!</p>
                     </div>
                 </div>
             </div>
@@ -468,12 +424,12 @@
                 <div class="col-md-6 col-lg-4 col-xl-4">
                     <div class="blog-box">
                         <div class="blog-img">
-                            <img class="img-fluid" src="{% static 'images/blog-img.jpg' %}" alt="" />
+                            <img class="img-fluid" src="{% static 'images/sneakers_for_latest_blog_1.jpg' %}" alt="" />
                         </div>
                         <div class="blog-content">
                             <div class="title-blog">
-                                <h3>Fusce in augue non nisi fringilla</h3>
-                                <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                <h3>The Hottest Summer Sneakers</h3>
+                                <p>Stay cool and stylish with our top picks for summer sneakers. Lightweight and trendy – these shoes are perfect for warm weather and outdoor activities. Check out our favorites and step up your summer game.</p>
                             </div>
                             <ul class="option-blog">
                                 <li><a href="#" data-toggle="tooltip" data-placement="right" title="Likes"><i class="far fa-heart"></i></a></li>
@@ -486,12 +442,12 @@
                 <div class="col-md-6 col-lg-4 col-xl-4">
                     <div class="blog-box">
                         <div class="blog-img">
-                            <img class="img-fluid" src="{% static 'images/blog-img-01.jpg' %}" alt="" />
+                            <img class="img-fluid" src="{% static 'images/sneakers_for_latest_blog_2.jpg' %}" alt="" />
                         </div>
                         <div class="blog-content">
                             <div class="title-blog">
-                                <h3>Fusce in augue non nisi fringilla</h3>
-                                <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                <h3>Sneaker Care Tips for Longevity</h3>
+                                <p> Learn how to keep your sneakers looking fresh and new with our easy care tips. From cleaning methods to storage solutions, these tips will help you extend the life of your favorite pairs.</p>
                             </div>
                             <ul class="option-blog">
                                 <li><a href="#" data-toggle="tooltip" data-placement="right" title="Likes"><i class="far fa-heart"></i></a></li>
@@ -504,12 +460,12 @@
                 <div class="col-md-6 col-lg-4 col-xl-4">
                     <div class="blog-box">
                         <div class="blog-img">
-                            <img class="img-fluid" src="{% static 'images/blog-img-02.jpg' %}" alt="" />
+                            <img class="img-fluid" src="{% static 'images/sneakers_for_latest_blog_3.jpg' %}" alt="" />
                         </div>
                         <div class="blog-content">
                             <div class="title-blog">
-                                <h3>Fusce in augue non nisi fringilla</h3>
-                                <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                <h3>The Best Sneakers for Running</h3>
+                                <p>Discover the best sneakers designed for running. Our top recommendations offer great support, cushioning, and durability to enhance your running experience. Find the perfect pair for your fitness journey.</p>
                             </div>
                             <ul class="option-blog">
                                 <li><a href="#" data-toggle="tooltip" data-placement="right" title="Likes"><i class="far fa-heart"></i></a></li>
@@ -523,8 +479,8 @@
         </div>
     </div>
     <!-- End Blog  -->
-
 {% endblock content %}
+
     <!-- Start Instagram Feed  -->
     <div class="instagram-box">
         <div class="main-instagram owl-carousel owl-theme">
@@ -620,8 +576,8 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-12 col-sm-12">
                         <div class="footer-widget">
-                            <h4>About ThewayShop</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            <h4>About StepUP</h4>
+                            <p>Welcome to StepUP, your ultimate destination for the latest and greatest in sneaker fashion. Our mission is to provide you with a curated selection of high-quality sneakers that blend style, comfort, and performance. Whether you're a sneaker enthusiast or just looking for the perfect pair to complete your outfit, we've got you covered.
                                 </p>
                             <ul>
                                 <li><a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
@@ -639,7 +595,7 @@
                             <h4>Information</h4>
                             <ul>
                                 <li><a href="{% url "about" %}">About Us</a></li>
-                                <li><a href="#">Customer Service</a></li>
+                                <li><a href="{% url "service" %}">Customer Service</a></li>
                                 <li><a href="#">Our Sitemap</a></li>
                                 <li><a href="#">Terms &amp; Conditions</a></li>
                                 <li><a href="#">Privacy Policy</a></li>
@@ -652,13 +608,13 @@
                             <h4>Contact Us</h4>
                             <ul>
                                 <li>
-                                    <p><i class="fas fa-map-marker-alt"></i>Address: Michael I. Days 3756 <br>Preston Street Wichita,<br> KS 67213 </p>
+                                    <p><i class="fas fa-map-marker-alt"></i>Address: Mykhailo Ivanovych Days 3756<br> Preston Street<br>Dnipro</p>
                                 </li>
                                 <li>
-                                    <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-888705770">+1-888 705 770</a></p>
+                                    <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+3801111111">+380-111-11-11</a></p>
                                 </li>
                                 <li>
-                                    <p><i class="fas fa-envelope"></i>Email: <a href="mailto:contactinfo@gmail.com">contactinfo@gmail.com</a></p>
+                                    <p><i class="fas fa-envelope"></i>Email: <a href="mailto:stepupsneakersshop@gmail.com">stepupsneakersshop@gmail.com</a></p>
                                 </li>
                             </ul>
                         </div>
@@ -668,6 +624,7 @@
         </div>
     </footer>
     <!-- End Footer  -->
+
 
     <!-- Start copyright  -->
     <div class="footer-copyright">

@@ -1,10 +1,13 @@
 from config.settings.base import *  # NOQA
 
-SECRET_KEY = "django-insecure-p_w@c@sfst@&tr7@c_9nqw619g__taezdm7xlc=g#94(=eyxu#"
+SECRET_KEY = os.environ.get("SECRET_KEY")  # NOQA F405
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    "localhost",
+]
 
 DATABASES = {
     "default": {
@@ -12,5 +15,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",  # NOQA
     }
 }
-
+STATIC_ROOT = BASE_DIR / "static/"  # NOQA
 STATIC_URL = "static/"
+
+MEDIA_ROOT = BASE_DIR / "media/"  # NOQA
+MEDIA_URL = "media/"
