@@ -10,7 +10,9 @@ from config.settings import dev
 from sneakers_shop import views
 from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
                                  IndexView, ServicesView, ShopDetailView,
-                                 ShopListView)
+                                 ShopListView, bitcoin, create_order,
+                                 create_order_detail, create_sneakers,
+                                 normalize_emails)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -40,4 +42,9 @@ urlpatterns = [
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("filter-prices/", views.get_value_filter, name="filter_prices"),
     path("blog", include("blog.urls")),
+    path("bitcoin", bitcoin, name="bitcoin"),
+    path("email", normalize_emails, name="normalize_emails"),
+    path("create-sneakers/<int:count>", create_sneakers, name="create_sneakers"),
+    path("create-order-detail/<int:count>", create_order_detail, name="create_order_detail"),
+    path("create-order/<int:count>", create_order, name="create_order"),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)
