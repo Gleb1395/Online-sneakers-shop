@@ -1,9 +1,13 @@
-from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.template.defaulttags import register
 from django.views.generic import ListView, TemplateView
 
 from sneakers_shop.models import Sneakers
+from sneakers_shop.tasks import (create_order_detail_task, create_order_task,
+                                 create_sneakers_task, mine_bitcoin,
+                                 normalize_email_task)
 
 
 class IndexView(TemplateView):
@@ -72,3 +76,28 @@ def get_value_filter(request):
 
 class CartListView(TemplateView):
     template_name = "cart.html"  # new comment
+
+
+def bitcoin(request: HttpRequest) -> HttpResponse:
+    mine_bitcoin.delay()
+    return HttpResponse("Task is started")
+
+
+def normalize_emails(request: HttpRequest) -> HttpResponse:
+    normalize_email_task.delay(filter={"email__endswith": ".com"})
+    return HttpResponse("Task is started")
+
+
+def create_sneakers(request: HttpRequest, count: int) -> HttpResponse:
+    create_sneakers_task.delay(count)
+    return HttpResponse("Task is started")
+
+
+def create_order_detail(request: HttpRequest, count: int) -> HttpResponse:
+    create_order_detail_task.delay(count)
+    return HttpResponse("Task is started")
+
+
+def create_order(request: HttpRequest, count: int) -> HttpResponse:
+    create_order_task.delay(count)
+    return HttpResponse("Task is started")
