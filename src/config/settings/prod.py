@@ -15,8 +15,9 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",  # NOQA
     }
 }
-STATIC_ROOT = BASE_DIR / "static/"  # NOQA
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static/"  # NOQA
 
-MEDIA_ROOT = BASE_DIR / "media/"  # NOQA
+
 MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media/"  # NOQA

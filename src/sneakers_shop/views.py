@@ -1,7 +1,9 @@
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.template.defaulttags import register
-from django.views.generic import ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
+from webargs import fields
+from webargs.djangoparser import use_args
 
 from sneakers_shop.models import Sneakers
 
@@ -12,10 +14,6 @@ class IndexView(TemplateView):
 
 class AboutView(TemplateView):
     template_name = "about.html"
-
-
-class ShopDetailView(TemplateView):
-    template_name = "detail.html"
 
 
 class ServicesView(TemplateView):
@@ -32,18 +30,30 @@ class ShopListView(ListView):
     context_object_name = "sneakers"
     paginate_by = 9
 
-    def get_queryset(self):
-
+    @use_args(
+        {
+            "sort": fields.Str(required=False),
+            "brand_sneakers": fields.Str(required=False),
+            "model_sneakers": fields.Str(required=False),
+        },
+        location="query",
+    )
+    def get_queryset(self, params):
+        sneakers = Sneakers.objects.all()
         sort_by = self.request.GET.get("sort", "all")
-        brand_show_by = self.request.GET.get("brand")
+        search_fields = ["brand_sneakers", "model_sneakers"]  # NOQA F841
+        filters = {}
+        if "brand_sneakers" in params:
+            filters["brand_sneakers"] = params["brand_sneakers"]
+        if "model_sneakers" in params:
+            filters["model_sneakers"] = params["model_sneakers"]
+        if filters:
+            sneakers = sneakers.filter(**filters)
         if sort_by == "h2l":
             return Sneakers.objects.order_by("-price_sneakers")
         elif sort_by == "l2h":
             return Sneakers.objects.order_by("price_sneakers")
-        if brand_show_by:
-            queryset = Sneakers.objects.filter(brand_sneakers=brand_show_by)
-            return queryset
-        return Sneakers.objects.all()
+        return sneakers
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -72,3 +82,16 @@ def get_value_filter(request):
 
 class CartListView(TemplateView):
     template_name = "cart.html"  # new comment
+
+
+class SneakersDetailView(DetailView):
+    model = Sneakers
+    context_object_name = "sneakers"
+    template_name = "shop-detail.html"
+
+    def get_queryset(self):
+        queryset = Sneakers.objects.filter(id=self.kwargs["pk"])
+        if queryset.exists():
+            return Sneakers.objects.filter(id=self.kwargs["pk"])
+        else:
+            raise Http404
