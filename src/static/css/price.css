@@ -3,6 +3,7 @@
     padding: 5px 20px;
     font-size: 14px;
 }
+
 .header h2 {
     font-size: 20px;
     display: flex;
@@ -14,6 +15,8 @@
 .price-input-container {
     width: 100%;
 }
+
+/* Убедитесь, что эти стили закомментированы, если они не нужны */
 /*.price-input .price-field {*/
 /*    border: none;*/
 /*    padding: 5px 20px;*/
@@ -36,16 +39,19 @@
     border: 0px;
     background: #e4e4e4;
 }
+
 .price-input {
     width: 100%;
     font-size: 19px;
     color: #555;
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 .slider-container {
     width: 100%;
     height: 6px;
@@ -63,11 +69,13 @@ input::-webkit-inner-spin-button {
     left: 0;
     right: 0;
 }
+
 .range-input {
     position: relative;
     width: 100%;
     margin-top: 10px;
 }
+
 .range-input input[type="range"] {
     -webkit-appearance: none;
     width: 100%;
@@ -77,6 +85,7 @@ input::-webkit-inner-spin-button {
     position: absolute;
     top: 0;
 }
+
 .range-input input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -90,6 +99,7 @@ input::-webkit-inner-spin-button {
     top: 50%;
     transform: translateY(-50%);
 }
+
 .range-input input[type="range"]::-moz-range-thumb {
     height: 18px;
     width: 18px;
@@ -102,4 +112,18 @@ input::-webkit-inner-spin-button {
     transform: translateY(-115%);
 }
 
+/* Новый стиль для контейнера кнопок */
+.button-container {
+    display: flex;
+    align-items: center; /* Центровка по вертикали */
+    gap: 10px; /* Расстояние между кнопками */
+}
 
+.dropbtn, .btn-danger {
+    background-color: #d33b33;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}

@@ -8,9 +8,9 @@ from rest_framework import permissions
 import blog
 from config.settings import dev
 from sneakers_shop import views
-from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
-                                 IndexView, ServicesView, ShopListView,
-                                 SneakersDetailView)
+from sneakers_shop.views import (AboutView, CartAddView, CartListView,
+                                 ContactUsView, IndexView, ServicesView,
+                                 ShopListView, SneakersDetailView)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -41,4 +41,5 @@ urlpatterns = [
     path("filter-prices/", views.get_value_filter, name="filter_prices"),
     path("blog", include("blog.urls")),
     path("shop-detail/<int:pk>/", SneakersDetailView.as_view(), name="shop-detail"),
+    path("add_to_cart/<int:pk>", CartAddView.as_view(), name="add_to_cart"),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)

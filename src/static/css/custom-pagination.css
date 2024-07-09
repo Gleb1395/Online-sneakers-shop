@@ -1,0 +1,25 @@
+.custom-pagination {
+  display: flex;
+  justify-content: center; /* Центрирование по горизонтали */
+  margin-top: 20px; /* Добавляем отступ сверху для лучшего внешнего вида */
+  margin-bottom: 20px;
+}
+
+.custom-pagination a {
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 0 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.custom-pagination a.active {
+  background-color: #d33b33;
+  color: white;
+  border: 1px solid #d33b33;
+}
+
+.custom-pagination a:hover:not(.active) {
+  background-color: #ddd;
+}
