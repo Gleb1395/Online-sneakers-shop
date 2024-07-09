@@ -1,0 +1,24 @@
+from config.settings.base import *  # NOQA
+
+SECRET_KEY = os.environ.get("SECRET_KEY")  # NOQA F405
+
+DEBUG = False
+
+
+ALLOWED_HOSTS = [
+    "ec2-16-171-132-54.eu-north-1.compute.amazonaws.com",
+    "localhost",
+]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+    }
+}
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static/"  # NOQA
+
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media/"  # NOQA
