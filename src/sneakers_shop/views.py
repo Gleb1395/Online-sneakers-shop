@@ -150,7 +150,7 @@ class CartAddView(View):
                 }
             request.session["cart"] = cart
 
-        return redirect("cart")
+        return redirect("cart") # ---
 
 
 class SneakersDetailView(DetailView):
