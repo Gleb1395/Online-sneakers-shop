@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bullseye
 
-RUN apt update
+RUN apt-get update
 
 
 RUN mkdir /shop
@@ -11,7 +11,6 @@ COPY ./src ./src
 COPY ./commands ./commands
 COPY ./requirements.txt ./requirements.txt
 
-
-RUN python -m pip install --upgrade pip & pip install -r requirements.txt
+RUN python -m pip install --upgrade pip && pip install -r requirements.txt
 
 CMD ["bash"]

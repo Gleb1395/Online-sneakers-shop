@@ -1,3 +1,4 @@
+import os
 import random
 from datetime import date
 
@@ -5,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from faker import Faker
+from pygments.lexers import q
 
 
 class Orders(models.Model):
@@ -66,14 +68,43 @@ class Sneakers(models.Model):
 
     @classmethod
     def create_sneakers(cls, count):
+        list_name_brand_sneakers = [
+            "Nike",
+            "Adidas",
+            "StrideSonic",
+            "Puma",
+            "Reebok",
+            "FlyFusion",
+            "New Balance",
+            "UrbanGlide",
+            "Asics",
+            "SwiftStep",
+        ]
+
+        list_name_model_sneakers = [
+            "Sporty sneakers",
+            "Trendy sneakers",
+            "Fashion sneakers",
+            "Casual sneakers",
+            "Athletic Footwear",
+            "Running Shoes",
+        ]
+
+        list_color_sneakers = ["Blue", "Green", "Red", "White", "Yellow", "Pink", "Brown"]
+
+        images_path = "src/media/media/sneakers"
+        image_files = os.listdir(images_path)
+
         for _ in range(count):
+            random_image = random.choice(image_files)
             sneakers = Sneakers.objects.create(
                 order_detail=None,
                 size_sneakers=random.randrange(37, 45),
-                color_sneakers="Red",
-                model_sneakers=f"Sport {random.randrange(1, 5)}",
-                brand_sneakers="Nike",
-                price_sneakers=random.uniform(10.0, 25.0),
+                color_sneakers=list_color_sneakers[random.randrange(len(list_color_sneakers))],
+                model_sneakers=list_name_model_sneakers[random.randrange(len(list_name_model_sneakers))],
+                brand_sneakers=list_name_brand_sneakers[random.randrange(len(list_name_brand_sneakers))],
+                price_sneakers=round(random.uniform(8, 200), 2),
+                image_sneakers=os.path.join("media/sneakers/", random_image),
             )
             sneakers.save()
 

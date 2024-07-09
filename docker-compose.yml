@@ -18,54 +18,54 @@ services:
       - media_content:/shop/src/media
     env_file:
       - .env
-    depends_on:
-      - postgres
-  postgres:
-    image: postgres:13.7
-    ports:
-      - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    env_file:
-      - .env
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container
-    restart: on-failure
-    env_file:
-      - .env
-    ports:
-      - "5000:80"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    depends_on:
-      - postgres
+#    depends_on:
+#      - postgres
+#  postgres:
+#    image: postgres:13.7
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - pg_data:/var/lib/postgresql/data
+#    env_file:
+#      - .env
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: pgadmin_container
+#    restart: on-failure
+#    env_file:
+#      - .env
+#    ports:
+#      - "5000:80"
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+#    depends_on:
+#      - postgres
 
-  mongodb:
-    image: mongo:3-stretch
-    container_name: mongo_db_container
-    ports:
-      - "27017:27017"
-    command: [ "--smallfiles" ]
-    volumes:
-      - mongo_data:/var/lib/db
-    restart: on-failure
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-  mongoadmin:
-    image: mongo-express
-    restart: always
-    container_name: mongo_admin_container
-    ports:
-      - 8091:8081
-    env_file:
-      - .env
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
+#  mongodb:
+#    image: mongo:3-stretch
+#    container_name: mongo_db_container
+#    ports:
+#      - "27017:27017"
+#    command: [ "--smallfiles" ]
+#    volumes:
+#      - mongo_data:/var/lib/db
+#    restart: on-failure
+#    env_file:
+#      - .env
+#    depends_on:
+#      - postgres
+#  mongoadmin:
+#    image: mongo-express
+#    restart: always
+#    container_name: mongo_admin_container
+#    ports:
+#      - 8091:8081
+#    env_file:
+#      - .env
+#    links:
+#      - mongodb
+#    depends_on:
+#      - mongodb
   ngixn:
     image: nginx:1.19
     volumes:
@@ -81,9 +81,9 @@ services:
       - backend
 
 volumes:
-  pg_data: { }
-  pgadmin: { }
-  mongo_data: { }
+#  pg_data: { }
+#  pgadmin: { }
+#  mongo_data: { }
   static_content: { }
   media_content: { }
 

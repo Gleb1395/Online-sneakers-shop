@@ -137,7 +137,6 @@
                                 <li><a href="checkout.html">Checkout</a></li>
                                 <li><a href="my-account.html">My Account</a></li>
                                 <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="detail.html">Shop Detail</a></li>
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'service'%}">Our Service</a></li>
@@ -257,31 +256,31 @@
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/Sporty sneakers.jpg' %}" alt="" />
-                        <a class="btn hvr-hover" href="#">Sporty Sneakers</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Sporty Sneakers</a>
                     </div>
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/Casual Kicks.jpg' %}" alt="" />
-                        <a class="btn hvr-hover" href="#">Casual Kicks</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Casual Kicks</a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/Trendy Sneakers.jpg' %}" alt="" />
-                        <a class="btn hvr-hover" href="#">Trendy Sneakers</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Trendy Sneakers</a>
                     </div>
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/Athletic Footwear.jpg' %}"  alt="" />
-                        <a class="btn hvr-hover" href="#">Athletic Footwear</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Athletic Footwear</a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/shoes-img.jpg' %}" alt="" />
-                        <a class="btn hvr-hover" href="#">Fashion Sneakers</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Fashion Sneakers</a>
                     </div>
                     <div class="shop-cat-box">
                         <img class="img-fluid" src="{% static 'images/Running Shoes.png' %}" alt="" />
-                        <a class="btn hvr-hover" href="#">Running Shoes</a>
+                        <a class="btn hvr-hover" href="{% url 'shop' %}">Running Shoes</a>
                     </div>
                 </div>
             </div>

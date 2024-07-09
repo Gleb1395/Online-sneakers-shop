@@ -6,6 +6,7 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = [
+    "ec2-16-171-132-54.eu-north-1.compute.amazonaws.com",
     "localhost",
 ]
 
@@ -15,8 +16,9 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",  # NOQA
     }
 }
-STATIC_ROOT = BASE_DIR / "static/"  # NOQA
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static/"  # NOQA
 
-MEDIA_ROOT = BASE_DIR / "media/"  # NOQA
+
 MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media/"  # NOQA

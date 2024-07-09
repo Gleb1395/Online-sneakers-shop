@@ -12,7 +12,6 @@ from api.views import (ClientCreateAPIView, ClientListAPIView,
                        SneakersCreateAPIView, SneakersDetailAPIView,
                        SneakersListAPIView, SneakersRetrieveDestroyAPIView,
                        SneakersRetrieveUpdateAPIView)
-from sneakers_shop.views import AboutView, IndexView, ShopDetailView
 
 app_name = "api"
 router = routers.DefaultRouter()

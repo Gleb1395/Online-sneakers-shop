@@ -8,9 +8,9 @@ from rest_framework import permissions
 import blog
 from config.settings import dev
 from sneakers_shop import views
-from sneakers_shop.views import (AboutView, CartListView, ContactUsView,
-                                 IndexView, ServicesView, ShopDetailView,
-                                 ShopListView)
+from sneakers_shop.views import (AboutView, CartAddView, CartListView,
+                                 ContactUsView, IndexView, ServicesView,
+                                 ShopListView, SneakersDetailView)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -29,7 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", IndexView.as_view(), name="index"),
     path("about/", AboutView.as_view(), name="about"),
-    path("detail/", ShopDetailView.as_view(), name="detail"),
+    # path("detail/", ShopDetailView.as_view(), name="detail"),
     path("service/", ServicesView.as_view(), name="service"),
     path("contact-us/", ContactUsView.as_view(), name="contact-us"),
     path("shop/", ShopListView.as_view(), name="shop"),
@@ -40,4 +40,6 @@ urlpatterns = [
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("filter-prices/", views.get_value_filter, name="filter_prices"),
     path("blog", include("blog.urls")),
+    path("shop-detail/<int:pk>/", SneakersDetailView.as_view(), name="shop-detail"),
+    path("add_to_cart/<int:pk>", CartAddView.as_view(), name="add_to_cart"),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)

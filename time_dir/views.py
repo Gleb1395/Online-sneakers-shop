@@ -1,15 +1,12 @@
-from datetime import date
-
 from django.db.models import Q
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import render
 from django.template.defaulttags import register
-from django.views.generic import DetailView, ListView, TemplateView, View
+from django.views.generic import DetailView, ListView, TemplateView
 from webargs import fields
 from webargs.djangoparser import use_args
 
-from sneakers_shop.forms import CartAddForm
-from sneakers_shop.models import Carts, Sneakers
+from sneakers_shop.models import Sneakers
 
 
 class IndexView(TemplateView):
@@ -39,7 +36,7 @@ class ShopListView(ListView):
             "sort": fields.Str(required=False),
             "brand_sneakers": fields.Str(required=False),
             "model_sneakers": fields.Str(required=False),
-            "filter_cleaning": fields.Str(required=False),
+            "sort_by": fields.Str(required=False),
         },
         location="query",
     )
@@ -48,29 +45,22 @@ class ShopListView(ListView):
         filters = {}
         search_fields = ["brand_sneakers", "model_sneakers"]
         or_filter = Q()
-
-        if params.get("filter_cleaning") == "clean":
-            self.request.session.flush()
-            return sneakers
-
-        if params.get("sort") == "all":
-            return sneakers
-
-        if params.get("sort") == "l2h":
-            return Sneakers.objects.order_by("price_sneakers")
-
-        if params.get("sort") == "h2l":
-            return Sneakers.objects.order_by("-price_sneakers")
-
         for param_name, param_value in params.items():
             for fileds in search_fields:
                 if fileds == param_name:
                     filters[fileds] = param_value
             self.request.session[f"{param_name}"] = filters[param_name]
-
             for n, v in self.request.session.items():
                 or_filter &= Q(**{n: v})
-
+            # or_filter = Q()
+            # or_filter |= Q(**{f"{param_name}__contains": param_value})
+            sneakers.filter(or_filter)
+            print(or_filter)
+            print(sneakers.filter(or_filter))
+        # print(f'{self.request.session.get("brand_sneakers")}')
+        # print(f'{self.request.session.get("model_sneakers")}')
+        # for k, v in self.request.session.items():
+        #     print(f'{k} -- {v}')
         return sneakers.filter(or_filter)
 
     def get_context_data(self, **kwargs):
@@ -98,59 +88,8 @@ def get_value_filter(request):
     return render(request, "shop.html", context)
 
 
-class CartListView(ListView):
-    model = Carts
-    template_name = "cart.html"
-    context_object_name = "carts"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context["carts"] = Carts.objects.filter(user=self.request.user)
-        else:
-            cart = self.request.session.get("cart", {})
-            context["carts"] = cart.values()
-        context["form"] = CartAddForm()
-        return context
-
-
-class CartAddView(View):
-    def get(self, request, *args, **kwargs):
-        product_id = kwargs.get("pk")
-        product = get_object_or_404(Sneakers, pk=product_id)
-
-        if request.user.is_authenticated:
-            cart_item, created = Carts.objects.get_or_create(
-                user=request.user,
-                sneakers=product,
-                defaults={
-                    "count_cart": 1,
-                    "total_price": product.price_sneakers,
-                    "cart_date": date.today(),
-                },
-            )
-            if not created:
-                cart_item.count_cart += 1
-                cart_item.total_price += product.price_sneakers
-                cart_item.save()
-        else:
-            cart = request.session.get("cart", {})
-            if str(product_id) in cart:
-                cart[str(product_id)]["count"] += 1
-                cart[str(product_id)]["total_price"] += product.price_sneakers
-            else:
-                cart[str(product_id)] = {
-                    "product_id": product_id,
-                    "count": 1,
-                    "total_price": product.price_sneakers,
-                    "model_sneakers": product.model_sneakers,
-                    "brand_sneakers": product.brand_sneakers,
-                    "image_sneakers": product.image_sneakers.url if product.image_sneakers else None,
-                    "price": product.price_sneakers,
-                }
-            request.session["cart"] = cart
-
-        return redirect("cart")
+class CartListView(TemplateView):
+    template_name = "cart.html"  # new comment
 
 
 class SneakersDetailView(DetailView):
