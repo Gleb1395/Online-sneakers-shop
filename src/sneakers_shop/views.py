@@ -50,7 +50,7 @@ class ShopListView(ListView):
         or_filter = Q()
 
         if params.get("filter_cleaning") == "clean":
-            self.request.session.flush()
+            sneakers = Sneakers.objects.all()
             return sneakers
 
         if params.get("sort") == "all":
@@ -69,7 +69,10 @@ class ShopListView(ListView):
             self.request.session[f"{param_name}"] = filters[param_name]
 
             for n, v in self.request.session.items():
-                or_filter &= Q(**{n: v})
+                if n == "cart":
+                    pass
+                else:
+                    or_filter &= Q(**{n: v})
 
         return sneakers.filter(or_filter)
 
@@ -106,11 +109,16 @@ class CartListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            carts = Carts.objects.filter(user=self.request.user)
             context["carts"] = Carts.objects.filter(user=self.request.user)
+            total_price = sum(cart.total_price for cart in carts)
         else:
             cart = self.request.session.get("cart", {})
             context["carts"] = cart.values()
+            total_price = sum(item["total_price"] for item in cart.values())
+
         context["form"] = CartAddForm()
+        context["total_price"] = total_price
         return context
 
 
@@ -118,7 +126,6 @@ class CartAddView(View):
     def get(self, request, *args, **kwargs):
         product_id = kwargs.get("pk")
         product = get_object_or_404(Sneakers, pk=product_id)
-
         if request.user.is_authenticated:
             cart_item, created = Carts.objects.get_or_create(
                 user=request.user,
@@ -149,8 +156,21 @@ class CartAddView(View):
                     "price": product.price_sneakers,
                 }
             request.session["cart"] = cart
+        return redirect("cart")
 
-        return redirect("cart")  # ---
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        product_id = kwargs.get("pk")
+        if action == "remove":
+            if request.user.is_authenticated:
+                cart_item = get_object_or_404(Carts, user=request.user, sneakers_id=product_id)
+                cart_item.delete()
+            else:
+                cart = request.session.get("cart", {})
+                if str(product_id) in cart:
+                    del cart[str(product_id)]
+                    request.session["cart"] = cart
+        return redirect("cart")
 
 
 class SneakersDetailView(DetailView):
