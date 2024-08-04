@@ -170,7 +170,7 @@ class CartAddView(View):
                 if str(product_id) in cart:
                     del cart[str(product_id)]
                     request.session["cart"] = cart
-        return redirect("cart") #------------
+        return redirect("cart")
 
 
 class SneakersDetailView(DetailView):
