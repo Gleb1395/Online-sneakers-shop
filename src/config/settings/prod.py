@@ -6,7 +6,7 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = [
-    "ec2-16-171-132-54.eu-north-1.compute.amazonaws.com",
+    "ec2-16-16-24-143.eu-north-1.compute.amazonaws.com", # NOQA
     "localhost",
 ]
 
