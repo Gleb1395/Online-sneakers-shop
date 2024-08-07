@@ -50,6 +50,8 @@ class ShopListView(ListView):
         or_filter = Q()
 
         if params.get("filter_cleaning") == "clean":
+            for field in search_fields:
+                self.request.session.pop(field, None)
             sneakers = Sneakers.objects.all()
             return sneakers
 
@@ -79,16 +81,27 @@ class ShopListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         unique_brands = set()
+        unique_models = set()
         brands_count = dict()
-        for shoes_brands in Sneakers.objects.all():
-            brand = shoes_brands.brand_sneakers
-            unique_brands.add(shoes_brands.brand_sneakers)
+        sneakers = Sneakers.objects.all()
+        count_brands = sneakers.values("brand_sneakers").distinct().count()
+        for shoe in Sneakers.objects.all():
+            brand = shoe.brand_sneakers
+            unique_brands.add(shoe.brand_sneakers)
+            unique_models.add(shoe.model_sneakers)
             if brand in brands_count:
                 brands_count[brand] += 1
             else:
                 brands_count[brand] = 1
-        context["unique_brands"] = unique_brands
-        context["brands_count"] = brands_count
+
+        context.update(
+            {
+                "unique_brands": sorted(unique_brands),
+                "brands_count": brands_count,
+                "count_brands": count_brands,
+                "unique_models": list(unique_models),
+            }
+        )
         return context
 
 
@@ -156,6 +169,7 @@ class CartAddView(View):
                     "price": product.price_sneakers,
                 }
             request.session["cart"] = cart
+            print(cart)
         return redirect("cart")
 
     def post(self, request, *args, **kwargs):

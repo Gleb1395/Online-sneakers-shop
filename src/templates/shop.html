@@ -31,7 +31,7 @@
                                     <a class="list-group-item list-group-item-action" href="#sub-men1"
                                        data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Sneakers
                                         brand
-                                        <small class="text-muted">{{ sneakers.count }}</small>
+                                        <small class="text-muted">{{ count_brands }}</small>
                                     </a>
                                     <div class="collapse show" id="sub-men1" data-parent="#list-group-men">
                                         <div class="list-group">
@@ -110,11 +110,11 @@
                             <div class="brand-box">
                                 <ul>
                                     <li>
-                                        {% for model in sneakers %}
+                                        {% for model in unique_models %}
                                             <div class="radio radio-danger">
-                                                <a href="{% url 'shop' %}?model_sneakers={{ model.model_sneakers }}"
+                                                <a href="{% url 'shop' %}?model_sneakers={{model }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
-                                                <label for="Radios1"> {{ model.model_sneakers }}</label></a>
+                                                <label for="Radios1"> {{ model }}</label></a>
                                             </div>
                                         {% endfor %}
                                     </li>
