@@ -64,7 +64,7 @@ class Sneakers(models.Model):
     image_sneakers = models.ImageField(blank=True, null=True, upload_to="media/sneakers/")
 
     def __str__(self):
-        return f"{self.size_sneakers} {self.brand_sneakers} {self.color_sneakers}"
+        return f"{self.size_sneakers} {self.brand_sneakers} {self.color_sneakers} {self.model_sneakers}"
 
     @classmethod
     def create_sneakers(cls, count):

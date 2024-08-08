@@ -46,8 +46,9 @@ class ShopListView(ListView):
     def get_queryset(self, params):
         sneakers = Sneakers.objects.all()
         filters = {}
-        search_fields = ["brand_sneakers", "model_sneakers"]
+        search_fields = ["brand_sneakers", "model_sneakers", "sort"]
         or_filter = Q()
+        sorted_by = params.get("sort")
 
         if params.get("filter_cleaning") == "clean":
             for field in search_fields:
@@ -55,28 +56,27 @@ class ShopListView(ListView):
             sneakers = Sneakers.objects.all()
             return sneakers
 
-        if params.get("sort") == "all":
-            return sneakers
-
-        if params.get("sort") == "l2h":
-            return Sneakers.objects.order_by("price_sneakers")
-
-        if params.get("sort") == "h2l":
-            return Sneakers.objects.order_by("-price_sneakers")
-
         for param_name, param_value in params.items():
+
             for fileds in search_fields:
                 if fileds == param_name:
                     filters[fileds] = param_value
             self.request.session[f"{param_name}"] = filters[param_name]
 
-            for n, v in self.request.session.items():
-                if n == "cart":
+            for k, v in self.request.session.items():
+                if k == "cart":
                     pass
+                if k == "sort":
+                    sorted_by = v
                 else:
-                    or_filter &= Q(**{n: v})
+                    or_filter &= Q(**{k: v})
 
-        return sneakers.filter(or_filter)
+        if sorted_by:
+            queryset = sneakers.filter(or_filter).order_by(sorted_by)
+        else:
+            queryset = sneakers.filter(or_filter)
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

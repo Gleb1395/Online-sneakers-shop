@@ -130,9 +130,8 @@
                             <div class="dropdown">
                                 <button class="dropbtn">Sorted by</button>
                                 <div class="dropdown-content">
-                                    <a href="{% url 'shop' %}?sort=all">Nothing</a>
-                                    <a href="{% url 'shop' %}?sort=l2h">Low to high</a>
-                                    <a href="{% url 'shop' %}?sort=h2l">High to low</a>
+                                    <a href="{% url 'shop' %}?sort=price_sneakers">Low to high</a>
+                                    <a href="{% url 'shop' %}?sort=-price_sneakers">High to low</a>
                                 </div>
                             </div>
                             <a class="btn-danger" href="{% url 'shop' %}?filter_cleaning=clean">clean filter</a>
