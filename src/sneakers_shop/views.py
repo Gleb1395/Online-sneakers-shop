@@ -34,12 +34,19 @@ class ShopListView(ListView):
     context_object_name = "sneakers"
     paginate_by = 9
 
+    def post(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
     @use_args(
         {
             "sort": fields.Str(required=False),
             "brand_sneakers": fields.Str(required=False),
             "model_sneakers": fields.Str(required=False),
             "filter_cleaning": fields.Str(required=False),
+            "min_price": fields.Integer(required=False),
+            "max_price": fields.Integer(required=False),
         },
         location="query",
     )
@@ -49,6 +56,9 @@ class ShopListView(ListView):
         search_fields = ["brand_sneakers", "model_sneakers", "sort"]
         or_filter = Q()
         sorted_by = params.get("sort")
+        min_price = self.request.POST.get("min_price")
+        max_price = self.request.POST.get("max_price")
+        print(min_price, max_price)
 
         if params.get("filter_cleaning") == "clean":
             for field in search_fields:
@@ -105,13 +115,32 @@ class ShopListView(ListView):
         return context
 
 
-def get_value_filter(request):
-    if request.method == "POST":
-        min_price = request.POST.get("min_price")
-        max_price = request.POST.get("max_price")
-        show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
-        context = {"sneakers": show_sneakers, "min_price": min_price, "max_price": max_price}
-    return render(request, "shop.html", context)
+# def get_value_filter(request):
+#     if request.method == "POST":
+#         min_price = request.POST.get("min_price")
+#         max_price = request.POST.get("max_price")
+#         show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
+#         context = {"sneakers": show_sneakers, "min_price": min_price, "max_price": max_price}
+#     return render(request, "shop.html", context)
+# def get_value_filter(request): # Нунжо сделать
+#
+#     view = ShopListView()
+#     view.setup(request)
+#     view.object_list = view.get_queryset()
+#     context = view.get_context_data()
+#
+#
+#     if request.method == "POST":
+#         min_price = request.POST.get("min_price")
+#         max_price = request.POST.get("max_price")
+#         if min_price and max_price:
+#             show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
+#         else:
+#             show_sneakers = Sneakers.objects.all()
+#         context.update({"min_price": min_price, "max_price": max_price})
+#         print(context)
+#
+#     return render(request, "shop.html", context)
 
 
 class CartListView(ListView):

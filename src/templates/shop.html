@@ -56,7 +56,7 @@
                                         Price
                                     </h2>
                                 </div>
-                                <form method="post" action="{% url 'filter_prices' %}">
+                                <form method="post" action="{% url 'shop' %}">
                                     {% csrf_token %}
                                     <div class="price-input-container">
                                         <div class="price-input">
@@ -112,7 +112,7 @@
                                     <li>
                                         {% for model in unique_models %}
                                             <div class="radio radio-danger">
-                                                <a href="{% url 'shop' %}?model_sneakers={{model }}"
+                                                <a href="{% url 'shop' %}?model_sneakers={{ model }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
                                                 <label for="Radios1"> {{ model }}</label></a>
                                             </div>
@@ -205,38 +205,72 @@
     {% if is_paginated %}
         <div class="custom-pagination">
             {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ request.GET.sort }}">&laquo;</a>
             {% endif %}
 
             {% if page_obj.number > 4 %}
-                <a href="?page=1">1</a>
+                <a href="?page=1&sort={{ request.GET.sort }}">1</a>
                 {% if page_obj.number > 5 %}
-
                 {% endif %}
             {% endif %}
 
             {% for num in page_obj.paginator.page_range %}
                 {% if num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}
                     {% if num == page_obj.number %}
-                        <a class="active" href="?page={{ num }}">{{ num }}</a>
+                        <a class="active" href="?page={{ num }}&sort={{ request.GET.sort }}">{{ num }}</a>
                     {% else %}
-                        <a href="?page={{ num }}">{{ num }}</a>
+                        <a href="?page={{ num }}&sort={{ request.GET.sort }}">{{ num }}</a>
                     {% endif %}
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.number < page_obj.paginator.num_pages|add:-3 %}
                 {% if page_obj.number < page_obj.paginator.num_pages|add:-4 %}
-
                 {% endif %}
-                <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ request.GET.sort }}">{{ page_obj.paginator.num_pages }}</a>
             {% endif %}
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ request.GET.sort }}">&raquo;</a>
             {% endif %}
         </div>
     {% endif %}
+
+    {#    {% if is_paginated %}#}
+    {#        <div class="custom-pagination">#}
+    {#            {% if page_obj.has_previous %}#}
+    {#                <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>#}
+    {#            {% endif %}#}
+    {##}
+    {#            {% if page_obj.number > 4 %}#}
+    {#                <a href="?page=1">1</a>#}
+    {#                {% if page_obj.number > 5 %}#}
+    {##}
+    {#                {% endif %}#}
+    {#            {% endif %}#}
+    {##}
+    {#            {% for num in page_obj.paginator.page_range %}#}
+    {#                {% if num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}#}
+    {#                    {% if num == page_obj.number %}#}
+    {#                        <a class="active" href="?page={{ num }}">{{ num }}</a>#}
+    {#                    {% else %}#}
+    {#                        <a href="?page={{ num }}">{{ num }}</a>#}
+    {#                    {% endif %}#}
+    {#                {% endif %}#}
+    {#            {% endfor %}#}
+    {##}
+    {#            {% if page_obj.number < page_obj.paginator.num_pages|add:-3 %}#}
+    {#                {% if page_obj.number < page_obj.paginator.num_pages|add:-4 %}#}
+    {##}
+    {#                {% endif %}#}
+    {#                <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>#}
+    {#            {% endif %}#}
+    {##}
+    {#            {% if page_obj.has_next %}#}
+    {#                <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>#}
+    {#            {% endif %}#}
+    {#        </div>#}
+    {#    {% endif %}#}
 
     <!-- End Shop Page -->
 {% endblock content %}

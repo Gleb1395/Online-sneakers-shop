@@ -38,7 +38,7 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("docs/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("docs-swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("filter-prices/", views.get_value_filter, name="filter_prices"),
+    # path("filter-prices/", views.get_value_filter, name="filter_prices"),
     path("blog", include("blog.urls")),
     path("shop-detail/<int:pk>/", SneakersDetailView.as_view(), name="shop-detail"),
     path("add_to_cart/<int:pk>", CartAddView.as_view(), name="add_to_cart"),
