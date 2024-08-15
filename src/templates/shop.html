@@ -65,14 +65,14 @@
                                                 <input name="min_price"
                                                        type="number"
                                                        class="min-input"
-                                                       value="{{ min_price|default:'0' }}">
+                                                       value="{{ user_min_price }}">
                                             </div>
                                             <div class="price-field">
                                                 <span>Maximum Price</span>
                                                 <input name="max_price"
                                                        type="number"
                                                        class="max-input"
-                                                       value="{{ max_price|default:'100' }}">
+                                                       value="{{ user_max_price }}">
                                             </div>
                                         </div>
                                         <div class="slider-container">
@@ -85,15 +85,15 @@
                                     <div class="range-input">
                                         <input type="range"
                                                class="min-range"
-                                               min="0"
-                                               max="1000"
-                                               value="{{ min_price|default:'0' }}"
+                                               min="{{ db_min_price }}"
+                                               max="{{ db_max_price }}"
+                                               value="{{ user_min_price }}"
                                                step="1">
                                         <input type="range"
                                                class="max-range"
-                                               min="0"
-                                               max="1000"
-                                               value="{{ max_price|default:'100' }}"
+                                               min="{{ db_min_price }}"
+                                               max="{{ db_max_price }}"
+                                               value="{{ user_max_price }}"
                                                step="1">
                                     </div>
                             </div>
@@ -115,6 +115,42 @@
                                                 <a href="{% url 'shop' %}?model_sneakers={{ model }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
                                                 <label for="Radios1"> {{ model }}</label></a>
+                                            </div>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Color</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    <li>
+                                        {% for color in unique_color %}
+                                            <div class="radio radio-danger">
+                                                <a href="{% url 'shop' %}?color_sneakers={{ color }}"
+                                                <input name="survey" id="Radios1" value="Yes" type="radio">
+                                                <label for="Radios1"> {{ color }}</label></a>
+                                            </div>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Size</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    <li>
+                                        {% for size in unique_sizes %}
+                                            <div class="radio radio-danger">
+                                                <a href="{% url 'shop' %}?size_sneakers={{ size }}"
+                                                <input name="survey" id="Radios1" value="Yes" type="radio">
+                                                <label for="Radios1"> {{ size }}</label></a>
                                             </div>
                                         {% endfor %}
                                     </li>
@@ -236,41 +272,7 @@
         </div>
     {% endif %}
 
-    {#    {% if is_paginated %}#}
-    {#        <div class="custom-pagination">#}
-    {#            {% if page_obj.has_previous %}#}
-    {#                <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>#}
-    {#            {% endif %}#}
-    {##}
-    {#            {% if page_obj.number > 4 %}#}
-    {#                <a href="?page=1">1</a>#}
-    {#                {% if page_obj.number > 5 %}#}
-    {##}
-    {#                {% endif %}#}
-    {#            {% endif %}#}
-    {##}
-    {#            {% for num in page_obj.paginator.page_range %}#}
-    {#                {% if num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}#}
-    {#                    {% if num == page_obj.number %}#}
-    {#                        <a class="active" href="?page={{ num }}">{{ num }}</a>#}
-    {#                    {% else %}#}
-    {#                        <a href="?page={{ num }}">{{ num }}</a>#}
-    {#                    {% endif %}#}
-    {#                {% endif %}#}
-    {#            {% endfor %}#}
-    {##}
-    {#            {% if page_obj.number < page_obj.paginator.num_pages|add:-3 %}#}
-    {#                {% if page_obj.number < page_obj.paginator.num_pages|add:-4 %}#}
-    {##}
-    {#                {% endif %}#}
-    {#                <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>#}
-    {#            {% endif %}#}
-    {##}
-    {#            {% if page_obj.has_next %}#}
-    {#                <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>#}
-    {#            {% endif %}#}
-    {#        </div>#}
-    {#    {% endif %}#}
+
 
     <!-- End Shop Page -->
 {% endblock content %}

@@ -1,6 +1,8 @@
+import math
 from datetime import date
 
-from django.db.models import Q
+import requests
+from django.db.models import Max, Min, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
@@ -13,6 +15,10 @@ from sneakers_shop.models import Carts, Sneakers
 
 
 class IndexView(TemplateView):
+    """
+    Представление для отображения главной страницы сайта
+    """
+
     template_name = "index.html"
 
 
@@ -32,7 +38,7 @@ class ShopListView(ListView):
     model = Sneakers
     template_name = "shop.html"
     context_object_name = "sneakers"
-    paginate_by = 9
+    paginate_by = 12
 
     def post(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
@@ -47,18 +53,31 @@ class ShopListView(ListView):
             "filter_cleaning": fields.Str(required=False),
             "min_price": fields.Integer(required=False),
             "max_price": fields.Integer(required=False),
+            "color_sneakers": fields.Str(required=False),
+            "size_sneakers": fields.Str(required=False),
         },
         location="query",
     )
     def get_queryset(self, params):
         sneakers = Sneakers.objects.all()
         filters = {}
-        search_fields = ["brand_sneakers", "model_sneakers", "sort"]
+        search_fields = [
+            "brand_sneakers",
+            "model_sneakers",
+            "sort",
+            "min_price",
+            "max_price",
+            "color_sneakers",
+            "size_sneakers",
+        ]
         or_filter = Q()
         sorted_by = params.get("sort")
         min_price = self.request.POST.get("min_price")
         max_price = self.request.POST.get("max_price")
-        print(min_price, max_price)
+
+        if min_price and max_price:
+            params["min_price"] = min_price
+            params["max_price"] = max_price
 
         if params.get("filter_cleaning") == "clean":
             for field in search_fields:
@@ -67,38 +86,54 @@ class ShopListView(ListView):
             return sneakers
 
         for param_name, param_value in params.items():
-
             for fileds in search_fields:
                 if fileds == param_name:
                     filters[fileds] = param_value
             self.request.session[f"{param_name}"] = filters[param_name]
 
             for k, v in self.request.session.items():
+                if k == "min_price":
+                    or_filter &= Q(price_sneakers__gte=v)
+                    continue
+                if k == "max_price":
+                    or_filter &= Q(price_sneakers__lte=v)
+                    continue
                 if k == "cart":
-                    pass
+                    continue
                 if k == "sort":
                     sorted_by = v
                 else:
                     or_filter &= Q(**{k: v})
-
         if sorted_by:
             queryset = sneakers.filter(or_filter).order_by(sorted_by)
         else:
             queryset = sneakers.filter(or_filter)
-
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         unique_brands = set()
         unique_models = set()
+        unique_color = set()
+        unique_sizes = set()
         brands_count = dict()
         sneakers = Sneakers.objects.all()
         count_brands = sneakers.values("brand_sneakers").distinct().count()
+        db_min_price = sneakers.values("price_sneakers").aggregate(Min("price_sneakers"))["price_sneakers__min"]
+        db_max_price = sneakers.values("price_sneakers").aggregate(Max("price_sneakers"))["price_sneakers__max"]
+        if "min_price" in self.request.session and "max_price" in self.request.session:
+            user_min_price = int(self.request.session["min_price"])
+            user_max_price = int(self.request.session["max_price"])
+        else:
+            user_min_price = db_min_price
+            user_max_price = db_max_price
+
         for shoe in Sneakers.objects.all():
             brand = shoe.brand_sneakers
             unique_brands.add(shoe.brand_sneakers)
             unique_models.add(shoe.model_sneakers)
+            unique_color.add(shoe.color_sneakers)
+            unique_sizes.add(shoe.size_sneakers)
             if brand in brands_count:
                 brands_count[brand] += 1
             else:
@@ -110,37 +145,15 @@ class ShopListView(ListView):
                 "brands_count": brands_count,
                 "count_brands": count_brands,
                 "unique_models": list(unique_models),
+                "unique_color": list(unique_color),
+                "unique_sizes": list(unique_sizes),
+                "db_min_price": math.ceil(db_min_price),
+                "db_max_price": math.ceil(db_max_price),
+                "user_min_price": math.floor(user_min_price),
+                "user_max_price": math.floor(user_max_price),
             }
         )
         return context
-
-
-# def get_value_filter(request):
-#     if request.method == "POST":
-#         min_price = request.POST.get("min_price")
-#         max_price = request.POST.get("max_price")
-#         show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
-#         context = {"sneakers": show_sneakers, "min_price": min_price, "max_price": max_price}
-#     return render(request, "shop.html", context)
-# def get_value_filter(request): # Нунжо сделать
-#
-#     view = ShopListView()
-#     view.setup(request)
-#     view.object_list = view.get_queryset()
-#     context = view.get_context_data()
-#
-#
-#     if request.method == "POST":
-#         min_price = request.POST.get("min_price")
-#         max_price = request.POST.get("max_price")
-#         if min_price and max_price:
-#             show_sneakers = Sneakers.objects.filter(price_sneakers__range=(min_price, max_price))
-#         else:
-#             show_sneakers = Sneakers.objects.all()
-#         context.update({"min_price": min_price, "max_price": max_price})
-#         print(context)
-#
-#     return render(request, "shop.html", context)
 
 
 class CartListView(ListView):
