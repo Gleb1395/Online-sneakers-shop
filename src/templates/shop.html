@@ -31,7 +31,7 @@
                                     <a class="list-group-item list-group-item-action" href="#sub-men1"
                                        data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Sneakers
                                         brand
-                                        <small class="text-muted">{{ sneakers.count }}</small>
+                                        <small class="text-muted">{{ count_brands }}</small>
                                     </a>
                                     <div class="collapse show" id="sub-men1" data-parent="#list-group-men">
                                         <div class="list-group">
@@ -56,7 +56,7 @@
                                         Price
                                     </h2>
                                 </div>
-                                <form method="post" action="{% url 'filter_prices' %}">
+                                <form method="post" action="{% url 'shop' %}">
                                     {% csrf_token %}
                                     <div class="price-input-container">
                                         <div class="price-input">
@@ -65,14 +65,14 @@
                                                 <input name="min_price"
                                                        type="number"
                                                        class="min-input"
-                                                       value="{{ min_price|default:'0' }}">
+                                                       value="{{ user_min_price }}">
                                             </div>
                                             <div class="price-field">
                                                 <span>Maximum Price</span>
                                                 <input name="max_price"
                                                        type="number"
                                                        class="max-input"
-                                                       value="{{ max_price|default:'100' }}">
+                                                       value="{{ user_max_price }}">
                                             </div>
                                         </div>
                                         <div class="slider-container">
@@ -85,15 +85,15 @@
                                     <div class="range-input">
                                         <input type="range"
                                                class="min-range"
-                                               min="0"
-                                               max="1000"
-                                               value="{{ min_price|default:'0' }}"
+                                               min="{{ db_min_price }}"
+                                               max="{{ db_max_price }}"
+                                               value="{{ user_min_price }}"
                                                step="1">
                                         <input type="range"
                                                class="max-range"
-                                               min="0"
-                                               max="1000"
-                                               value="{{ max_price|default:'100' }}"
+                                               min="{{ db_min_price }}"
+                                               max="{{ db_max_price }}"
+                                               value="{{ user_max_price }}"
                                                step="1">
                                     </div>
                             </div>
@@ -110,11 +110,47 @@
                             <div class="brand-box">
                                 <ul>
                                     <li>
-                                        {% for model in sneakers %}
+                                        {% for model in unique_models %}
                                             <div class="radio radio-danger">
-                                                <a href="{% url 'shop' %}?model_sneakers={{ model.model_sneakers }}"
+                                                <a href="{% url 'shop' %}?model_sneakers={{ model }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
-                                                <label for="Radios1"> {{ model.model_sneakers }}</label></a>
+                                                <label for="Radios1"> {{ model }}</label></a>
+                                            </div>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Color</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    <li>
+                                        {% for color in unique_color %}
+                                            <div class="radio radio-danger">
+                                                <a href="{% url 'shop' %}?color_sneakers={{ color }}"
+                                                <input name="survey" id="Radios1" value="Yes" type="radio">
+                                                <label for="Radios1"> {{ color }}</label></a>
+                                            </div>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Size</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    <li>
+                                        {% for size in unique_sizes %}
+                                            <div class="radio radio-danger">
+                                                <a href="{% url 'shop' %}?size_sneakers={{ size }}"
+                                                <input name="survey" id="Radios1" value="Yes" type="radio">
+                                                <label for="Radios1"> {{ size }}</label></a>
                                             </div>
                                         {% endfor %}
                                     </li>
@@ -130,9 +166,8 @@
                             <div class="dropdown">
                                 <button class="dropbtn">Sorted by</button>
                                 <div class="dropdown-content">
-                                    <a href="{% url 'shop' %}?sort=all">Nothing</a>
-                                    <a href="{% url 'shop' %}?sort=l2h">Low to high</a>
-                                    <a href="{% url 'shop' %}?sort=h2l">High to low</a>
+                                    <a href="{% url 'shop' %}?sort=price_sneakers">Low to high</a>
+                                    <a href="{% url 'shop' %}?sort=-price_sneakers">High to low</a>
                                 </div>
                             </div>
                             <a class="btn-danger" href="{% url 'shop' %}?filter_cleaning=clean">clean filter</a>
@@ -206,38 +241,38 @@
     {% if is_paginated %}
         <div class="custom-pagination">
             {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ request.GET.sort }}">&laquo;</a>
             {% endif %}
 
             {% if page_obj.number > 4 %}
-                <a href="?page=1">1</a>
+                <a href="?page=1&sort={{ request.GET.sort }}">1</a>
                 {% if page_obj.number > 5 %}
-
                 {% endif %}
             {% endif %}
 
             {% for num in page_obj.paginator.page_range %}
                 {% if num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}
                     {% if num == page_obj.number %}
-                        <a class="active" href="?page={{ num }}">{{ num }}</a>
+                        <a class="active" href="?page={{ num }}&sort={{ request.GET.sort }}">{{ num }}</a>
                     {% else %}
-                        <a href="?page={{ num }}">{{ num }}</a>
+                        <a href="?page={{ num }}&sort={{ request.GET.sort }}">{{ num }}</a>
                     {% endif %}
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.number < page_obj.paginator.num_pages|add:-3 %}
                 {% if page_obj.number < page_obj.paginator.num_pages|add:-4 %}
-
                 {% endif %}
-                <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ request.GET.sort }}">{{ page_obj.paginator.num_pages }}</a>
             {% endif %}
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ request.GET.sort }}">&raquo;</a>
             {% endif %}
         </div>
     {% endif %}
+
+
 
     <!-- End Shop Page -->
 {% endblock content %}
