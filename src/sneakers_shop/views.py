@@ -2,15 +2,19 @@ import math
 from datetime import date
 
 import requests
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
 from django.db.models import Max, Min, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
-from django.views.generic import DetailView, ListView, TemplateView, View
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  TemplateView, View)
 from webargs import fields
 from webargs.djangoparser import use_args
 
-from sneakers_shop.forms import CartAddForm
+from sneakers_shop.forms import CartAddForm, UserRegistrationForm
 from sneakers_shop.models import Carts, Sneakers
 
 
@@ -240,3 +244,19 @@ class SneakersDetailView(DetailView):
             return Sneakers.objects.filter(id=self.kwargs["pk"])
         else:
             raise Http404
+
+
+class UserRegistrationView(CreateView):
+    template_name = "sign_up.html"
+    form_class = UserRegistrationForm
+    success_url = reverse_lazy("index")
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        return super().form_valid(form)
+
+
+class UserLoginView(LoginView):
+    template_name = "sign_in.html"
+    success_url = reverse_lazy("index")
