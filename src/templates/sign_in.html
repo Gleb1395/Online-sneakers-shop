@@ -21,7 +21,13 @@
             <header>Login</header>
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="field input-field">
+                    {{ form.username }}
+                </div>
+                <div class="field input-field">
+                    {{ form.password }}
+                    <i class='bx bx-hide eye-icon'></i>
+                </div>
                 <div class="form-link">
                     <a href="#" class="forgot-pass">Forgot password?</a>
                 </div>

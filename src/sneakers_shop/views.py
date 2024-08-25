@@ -2,8 +2,9 @@ import math
 from datetime import date
 
 import requests
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Max, Min, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -14,7 +15,8 @@ from django.views.generic import (CreateView, DetailView, ListView,
 from webargs import fields
 from webargs.djangoparser import use_args
 
-from sneakers_shop.forms import CartAddForm, UserRegistrationForm
+from sneakers_shop.forms import (CartAddForm, UserLoginForm,
+                                 UserRegistrationForm)
 from sneakers_shop.models import Carts, Sneakers
 
 
@@ -160,6 +162,19 @@ class ShopListView(ListView):
         return context
 
 
+class SneakersDetailView(DetailView):
+    model = Sneakers
+    context_object_name = "sneakers"
+    template_name = "shop-detail.html"
+
+    def get_queryset(self):
+        queryset = Sneakers.objects.filter(id=self.kwargs["pk"])
+        if queryset.exists():
+            return Sneakers.objects.filter(id=self.kwargs["pk"])
+        else:
+            raise Http404
+
+
 class CartListView(ListView):
     model = Carts
     template_name = "cart.html"
@@ -167,10 +182,13 @@ class CartListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         if self.request.user.is_authenticated:
             carts = Carts.objects.filter(user=self.request.user)
-            context["carts"] = Carts.objects.filter(user=self.request.user)
+            context["carts"] = carts
             total_price = sum(cart.total_price for cart in carts)
+            context["total_price"] = total_price
+
         else:
             cart = self.request.session.get("cart", {})
             context["carts"] = cart.values()
@@ -183,8 +201,10 @@ class CartListView(ListView):
 
 class CartAddView(View):
     def get(self, request, *args, **kwargs):
+        print(kwargs)
         product_id = kwargs.get("pk")
         product = get_object_or_404(Sneakers, pk=product_id)
+
         if request.user.is_authenticated:
             cart_item, created = Carts.objects.get_or_create(
                 user=request.user,
@@ -215,7 +235,6 @@ class CartAddView(View):
                     "price": product.price_sneakers,
                 }
             request.session["cart"] = cart
-            print(cart)
         return redirect("cart")
 
     def post(self, request, *args, **kwargs):
@@ -223,8 +242,11 @@ class CartAddView(View):
         product_id = kwargs.get("pk")
         if action == "remove":
             if request.user.is_authenticated:
-                cart_item = get_object_or_404(Carts, user=request.user, sneakers_id=product_id)
-                cart_item.delete()
+                cart_item = Carts.objects.filter(user=request.user, sneakers_id=product_id)
+                if cart_item:
+                    cart_item.delete()
+                else:
+                    pass
             else:
                 cart = request.session.get("cart", {})
                 if str(product_id) in cart:
@@ -233,30 +255,26 @@ class CartAddView(View):
         return redirect("cart")
 
 
-class SneakersDetailView(DetailView):
-    model = Sneakers
-    context_object_name = "sneakers"
-    template_name = "shop-detail.html"
-
-    def get_queryset(self):
-        queryset = Sneakers.objects.filter(id=self.kwargs["pk"])
-        if queryset.exists():
-            return Sneakers.objects.filter(id=self.kwargs["pk"])
-        else:
-            raise Http404
-
-
 class UserRegistrationView(CreateView):
     template_name = "sign_up.html"
     form_class = UserRegistrationForm
     success_url = reverse_lazy("index")
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.save()
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        user = self.object
+        login(self.request, user)
+        return response
 
 
 class UserLoginView(LoginView):
     template_name = "sign_in.html"
+    form_class = UserLoginForm
     success_url = reverse_lazy("index")
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy("index")

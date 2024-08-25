@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "drf_yasg",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "rest_framework",
     "djoser",
     "phonenumber_field",
@@ -119,3 +121,7 @@ DJOSER = {
 }
 
 LOGIN_REDIRECT_URL = reverse_lazy("index")
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

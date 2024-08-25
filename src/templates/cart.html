@@ -20,38 +20,77 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for cart in carts %}
-                                    <tr>
-                                        <td class="thumbnail-img">
-                                            <a href="{% url 'shop-detail' cart.product_id %}">
-                                                <img class="img-fluid" src="{{ cart.image_sneakers }}" alt=""/>
-                                            </a>
-                                        </td>
-                                        <td class="name-pr">
-                                            <a href="{% url 'shop-detail' cart.product_id %}">
-                                                {{ cart.model_sneakers }} {{ cart.brand_sneakers }}
-                                            </a>
-                                        </td>
-                                        <td class="price-pr">
-                                            <p>$ {{ cart.price }}</p>
-                                        </td>
-                                        <td class="quantity-box">
-                                            <p> {{ cart.count }}</p>
-                                        </td>
-                                        <td class="total-pr">
-                                            <p>$ {{ cart.total_price|floatformat:2 }}</p>
-                                        </td>
-                                        <td class="remove-pr">
-                                            <form method="post" action="{% url "add_to_cart" cart.product_id %}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="action" value="remove">
-                                                <button type="submit" class="btn btn-link p-0">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                                {% if user.is_authenticated %}
+                                    {% for cart in carts %}
+                                        <tr>
+                                            <td class="thumbnail-img">
+                                                <a href="{% url 'shop-detail' cart.sneakers.id %}">
+                                                    <img class="img-fluid" src="{{ cart.sneakers.image_sneakers.url }}"
+                                                         alt=""/>
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.id %}">
+                                                    Model:{{ cart.sneakers.model_sneakers }},
+                                                    Brand:{{ cart.sneakers.brand_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="price-pr">
+                                                <p>$ {{ cart.sneakers.price_sneakers }}</p>
+                                            </td>
+                                            <td class="quantity-box">
+                                                <p> {{ cart.count }}</p>
+                                            </td>
+                                            <td class="total-pr">
+                                                <p>$ {{ cart.total_price|floatformat:2 }}</p>
+                                            </td>
+                                            <td class="remove-pr">
+                                                <form method="post" action="{% url "add_to_cart" cart.sneakers.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="remove">
+                                                    <button type="submit" class="btn btn-link p-0">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+
+                                {% else %}
+                                    {% for cart in carts %}
+                                        <tr>
+                                            <td class="thumbnail-img">
+                                                <a href="{% url 'shop-detail' cart.product_id %}">
+                                                    <img class="img-fluid" src="{{ cart.image_sneakers }}" alt=""/>
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_id %}">
+                                                    {{ cart.model_sneakers }} {{ cart.brand_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="price-pr">
+                                                <p>$ {{ cart.price }}</p>
+                                            </td>
+                                            <td class="quantity-box">
+                                                <p> {{ cart.count }}</p>
+                                            </td>
+                                            <td class="total-pr">
+                                                <p>$ {{ cart.total_price|floatformat:2 }}</p>
+                                            </td>
+                                            <td class="remove-pr">
+                                                <form method="post" action="{% url "add_to_cart" cart.product_id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="remove">
+                                                    <button type="submit" class="btn btn-link p-0">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -84,7 +123,7 @@
                             <h3>Order summary</h3>
                             <div class="d-flex">
                                 <h4>Sub Total</h4>
-                                <div class="ml-auto font-weight-bold"> $ {{ total_price|floatformat:2}}</div>
+                                <div class="ml-auto font-weight-bold"> $ {{ total_price|floatformat:2 }}</div>
                             </div>
                             <div class="d-flex">
                                 <h4>Discount</h4>

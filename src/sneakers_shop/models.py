@@ -137,4 +137,5 @@ class Carts(models.Model):
     cart_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.total_price} {self.cart_date}"
+        # return f"{self.total_price} {self.cart_date}"
+        return f"{self.sneakers} {self.total_price}"
