@@ -36,9 +36,9 @@
                         <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url "cart" %}">Cart</a></li>
-                            <li><a href="checkout.html">Checkout</a></li>
-                            <li><a href="my-account.html">My Account</a></li>
-                            <li><a href="wishlist.html">Wishlist</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="{% url 'wishlist'%}">Wishlist</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'service' %}">Our Service</a></li>
@@ -50,7 +50,6 @@
             <!-- Start Atribute Navigation -->
             <div class="attr-nav">
                 <ul>
-                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
                     <li class="side-menu"><a href="#">
                         <i class="fa fa-shopping-bag"></i>
                         <span class="badge">{{ badge }}</span>
