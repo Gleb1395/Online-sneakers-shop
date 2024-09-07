@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
-{% load custom_filters %}
+{% load custom_filters %} # ToDo узнать что это
 {% block content %}
     <link rel="stylesheet"
           href="{% static 'css/price.css' %}">
@@ -16,8 +16,9 @@
                 <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
                     <div class="product-categori">
                         <div class="search-product">
-                            <form action="#">
-                                <input class="form-control" placeholder="Search here..." type="text">
+                            <form method="post" action="{% url 'shop' %}"" >
+                                {% csrf_token %}
+                                <input class="form-control" placeholder="Search here..." type="text" name="search">
                                 <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
@@ -212,7 +213,7 @@
                                                                 <li><a href="#" data-toggle="tooltip"
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
-                                                                <li><a href="#" data-toggle="tooltip"
+                                                                <li><a href="{% url "add_to_wishlist" product.pk %}" data-toggle="tooltip"
                                                                        data-placement="right"
                                                                        title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>

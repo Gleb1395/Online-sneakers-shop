@@ -17,7 +17,7 @@ from webargs.djangoparser import use_args
 
 from sneakers_shop.forms import (CartAddForm, UserLoginForm,
                                  UserRegistrationForm)
-from sneakers_shop.models import Carts, Sneakers
+from sneakers_shop.models import Carts, Sneakers, Wishlists
 
 
 class IndexView(TemplateView):
@@ -80,6 +80,16 @@ class ShopListView(ListView):
         sorted_by = params.get("sort")
         min_price = self.request.POST.get("min_price")
         max_price = self.request.POST.get("max_price")
+        search = self.request.POST.get("search")
+
+        if search:
+            sneakers = Sneakers.objects.filter(
+                Q(size_sneakers__icontains=search)
+                | Q(color_sneakers__icontains=search)  # NOQA W503
+                | Q(model_sneakers__icontains=search)  # NOQA W503
+                | Q(brand_sneakers__icontains=search)  # NOQA W503
+            )
+            return sneakers
 
         if min_price and max_price:
             params["min_price"] = min_price
@@ -98,6 +108,10 @@ class ShopListView(ListView):
             self.request.session[f"{param_name}"] = filters[param_name]
 
             for k, v in self.request.session.items():
+                if k == "wishlist":
+                    continue
+                if k.startswith("_"):
+                    continue
                 if k == "min_price":
                     or_filter &= Q(price_sneakers__gte=v)
                     continue
@@ -134,12 +148,12 @@ class ShopListView(ListView):
             user_min_price = db_min_price
             user_max_price = db_max_price
 
-        for shoe in Sneakers.objects.all():
-            brand = shoe.brand_sneakers
-            unique_brands.add(shoe.brand_sneakers)
-            unique_models.add(shoe.model_sneakers)
-            unique_color.add(shoe.color_sneakers)
-            unique_sizes.add(shoe.size_sneakers)
+        for shoes in Sneakers.objects.all():
+            brand = shoes.brand_sneakers
+            unique_brands.add(shoes.brand_sneakers)
+            unique_models.add(shoes.model_sneakers)
+            unique_color.add(shoes.color_sneakers)
+            unique_sizes.add(shoes.size_sneakers)
             if brand in brands_count:
                 brands_count[brand] += 1
             else:
@@ -196,12 +210,12 @@ class CartListView(ListView):
 
         context["form"] = CartAddForm()
         context["total_price"] = total_price
+        print(context["carts"])
         return context
 
 
 class CartAddView(View):
     def get(self, request, *args, **kwargs):
-        print(kwargs)
         product_id = kwargs.get("pk")
         product = get_object_or_404(Sneakers, pk=product_id)
 
@@ -278,3 +292,43 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy("index")
+
+
+class WishlistAddView(View):
+    def get(self, request, *args, **kwargs):
+        product_id = kwargs.get("pk")
+        product = get_object_or_404(Sneakers, pk=product_id)
+
+        if request.user.is_authenticated:
+            Wishlists.objects.get_or_create(
+                user=request.user,
+                product=product,
+            )
+        else:
+            wishlist = request.session.get("wishlist", {})
+            wishlist[str(product_id)] = {
+                "product_id": product_id,
+                "model_sneakers": product.model_sneakers,
+                "brand_sneakers": product.brand_sneakers,
+                "image_sneakers": product.image_sneakers.url if product.image_sneakers else None,
+                "price": product.price_sneakers,
+            }
+            request.session["wishlist"] = wishlist
+        return redirect("wishlist")
+
+
+class WishListView(ListView):
+    model = Wishlists
+    template_name = "wishlist.html"
+    context_object_name = "wishlists"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            context["wishlists"] = Wishlists.objects.filter(user=self.request.user)
+        else:
+            wishlist = self.request.session.get("wishlist", {})
+            context["wishlist"] = wishlist.values()
+
+        return context

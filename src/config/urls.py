@@ -12,7 +12,8 @@ from sneakers_shop.views import (AboutView, CartAddView, CartListView,
                                  ContactUsView, IndexView, ServicesView,
                                  ShopListView, SneakersDetailView,
                                  UserLoginView, UserLogoutView,
-                                 UserRegistrationView)
+                                 UserRegistrationView, WishlistAddView,
+                                 WishListView)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -47,4 +48,6 @@ urlpatterns = [
     path("sign-up", UserRegistrationView.as_view(), name="sign-up"),
     path("sign-in", UserLoginView.as_view(), name="sign-in"),
     path("logout", UserLogoutView.as_view(), name="logout"),
+    path("add_to_wishlist/<int:pk>", WishlistAddView.as_view(), name="add_to_wishlist"),
+    path("wishlist", WishListView.as_view(), name="wishlist"),
 ] + static(dev.MEDIA_URL, document_root=dev.MEDIA_ROOT)
