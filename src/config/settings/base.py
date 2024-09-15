@@ -69,7 +69,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "sneakers_shop.templatetags.context_processors.cart_badge",
                 "sneakers_shop.templatetags.context_processors.cart_product",
-                "sneakers_shop.templatetags.context_processors.cart_total_price",
+                "sneakers_shop.templatetags.context_processors.categories_processor",
             ],
         },
     },

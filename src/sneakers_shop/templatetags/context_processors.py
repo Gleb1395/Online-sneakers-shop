@@ -1,4 +1,4 @@
-from sneakers_shop.models import Carts
+from sneakers_shop.models import Carts, SneakersCategories
 
 
 def cart_badge(request):
@@ -25,3 +25,8 @@ def cart_total_price(request):
         cart = request.session.get("cart", {})
         total_price = sum(item["total_price"] for item in cart.values())
     return {"price": total_price}
+
+
+def categories_processor(request):
+    categories = SneakersCategories.objects.all()
+    return {"categories": categories}

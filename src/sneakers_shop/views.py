@@ -17,34 +17,51 @@ from webargs.djangoparser import use_args
 
 from sneakers_shop.forms import (CartAddForm, UserLoginForm,
                                  UserRegistrationForm)
-from sneakers_shop.models import Carts, Sneakers, Wishlists
+from sneakers_shop.models import (Carts, Sneakers, SneakersCategories,
+                                  SneakersSize, Wishlists)
 
 
 class IndexView(TemplateView):
     """
-    Представление для отображения главной страницы сайта
+    A view for displaying the home page of the site
     """
 
     template_name = "index.html"
 
 
 class AboutView(TemplateView):
+    """
+    A simple view that renders the 'About'.
+    """
+
     template_name = "about.html"
 
 
 class ServicesView(TemplateView):
+    """
+    A view that renders the 'Services'.
+    """
+
     template_name = "service.html"
 
 
 class ContactUsView(TemplateView):
+    """
+    A view that renders the 'Contact Us'.
+    """
+
     template_name = "contact_us.html"
 
 
 class ShopListView(ListView):
+    """
+    A view that displays a paginated list of sneakers.
+    """
+
     model = Sneakers
     template_name = "shop.html"
     context_object_name = "sneakers"
-    paginate_by = 12
+    paginate_by = 18
 
     def post(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
@@ -55,26 +72,29 @@ class ShopListView(ListView):
         {
             "sort": fields.Str(required=False),
             "brand_sneakers": fields.Str(required=False),
-            "model_sneakers": fields.Str(required=False),
+            "assignment_sneakers": fields.Str(required=False),
             "filter_cleaning": fields.Str(required=False),
             "min_price": fields.Integer(required=False),
             "max_price": fields.Integer(required=False),
             "color_sneakers": fields.Str(required=False),
-            "size_sneakers": fields.Str(required=False),
+            "size": fields.Str(required=False),
+            "category": fields.Str(required=False),
         },
         location="query",
     )
     def get_queryset(self, params):
         sneakers = Sneakers.objects.all()
+
         filters = {}
         search_fields = [
             "brand_sneakers",
-            "model_sneakers",
+            "assignment_sneakers",
             "sort",
             "min_price",
             "max_price",
             "color_sneakers",
-            "size_sneakers",
+            "size",
+            "category",
         ]
         or_filter = Q()
         sorted_by = params.get("sort")
@@ -84,9 +104,8 @@ class ShopListView(ListView):
 
         if search:
             sneakers = Sneakers.objects.filter(
-                Q(size_sneakers__icontains=search)
-                | Q(color_sneakers__icontains=search)  # NOQA W503
-                | Q(model_sneakers__icontains=search)  # NOQA W503
+                Q(color_sneakers__icontains=search)  # NOQA W503
+                | Q(assignment_sneakers__icontains=search)  # NOQA W503
                 | Q(brand_sneakers__icontains=search)  # NOQA W503
             )
             return sneakers
@@ -107,23 +126,29 @@ class ShopListView(ListView):
                     filters[fileds] = param_value
             self.request.session[f"{param_name}"] = filters[param_name]
 
-            for k, v in self.request.session.items():
-                if k == "wishlist":
+            for key, value in self.request.session.items():
+
+                if key == "wishlist" or key == "cart":
                     continue
-                if k.startswith("_"):
+                if key.startswith("_"):
                     continue
-                if k == "min_price":
-                    or_filter &= Q(price_sneakers__gte=v)
+                elif key == "min_price":
+                    or_filter &= Q(price_sneakers__gte=value)
                     continue
-                if k == "max_price":
-                    or_filter &= Q(price_sneakers__lte=v)
+                elif key == "max_price":
+                    or_filter &= Q(price_sneakers__lte=value)
                     continue
-                if k == "cart":
+                elif key == "sort":
+                    sorted_by = value
                     continue
-                if k == "sort":
-                    sorted_by = v
+                elif key == "size":
+                    or_filter &= Q(size_relations__size__size=value)
+                    continue
+                elif key == "category":
+                    or_filter &= Q(category_relations__categories__category_sneakers=value)
+                    continue
                 else:
-                    or_filter &= Q(**{k: v})
+                    or_filter &= Q(**{key: value})
         if sorted_by:
             queryset = sneakers.filter(or_filter).order_by(sorted_by)
         else:
@@ -133,9 +158,8 @@ class ShopListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         unique_brands = set()
-        unique_models = set()
+        unique_assignment = set()
         unique_color = set()
-        unique_sizes = set()
         brands_count = dict()
         sneakers = Sneakers.objects.all()
         count_brands = sneakers.values("brand_sneakers").distinct().count()
@@ -151,9 +175,8 @@ class ShopListView(ListView):
         for shoes in Sneakers.objects.all():
             brand = shoes.brand_sneakers
             unique_brands.add(shoes.brand_sneakers)
-            unique_models.add(shoes.model_sneakers)
+            unique_assignment.add(shoes.assignment_sneakers)
             unique_color.add(shoes.color_sneakers)
-            unique_sizes.add(shoes.size_sneakers)
             if brand in brands_count:
                 brands_count[brand] += 1
             else:
@@ -164,9 +187,9 @@ class ShopListView(ListView):
                 "unique_brands": sorted(unique_brands),
                 "brands_count": brands_count,
                 "count_brands": count_brands,
-                "unique_models": list(unique_models),
+                "unique_assignment": list(unique_assignment),
                 "unique_color": list(unique_color),
-                "unique_sizes": list(unique_sizes),
+                "unique_sizes": SneakersSize.objects.all().order_by("size"),
                 "db_min_price": math.ceil(db_min_price),
                 "db_max_price": math.ceil(db_max_price),
                 "user_min_price": math.floor(user_min_price),
@@ -182,9 +205,9 @@ class SneakersDetailView(DetailView):
     template_name = "shop-detail.html"
 
     def get_queryset(self):
-        queryset = Sneakers.objects.filter(id=self.kwargs["pk"])
+        queryset = Sneakers.objects.filter(slug=self.kwargs["slug"])
         if queryset.exists():
-            return Sneakers.objects.filter(id=self.kwargs["pk"])
+            return Sneakers.objects.filter(slug=self.kwargs["slug"])
         else:
             raise Http404
 
@@ -197,32 +220,46 @@ class CartListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        coupon = self.request.GET.get("coupon")
+        dict_discount = {"Bonus": 5, "Express": 10, "Save": 8, "Flash": 15, "Favorite": 25}
+
         if self.request.user.is_authenticated:
             carts = Carts.objects.filter(user=self.request.user)
             context["carts"] = carts
             total_price = sum(cart.total_price for cart in carts)
+            if coupon in dict_discount.keys():
+                context["coupon"] = dict_discount[coupon]
+                discount = total_price * (int(dict_discount[coupon]) / 100)
+                total_price_with_discount = total_price - discount
+                context["total_price_with_discount"] = total_price_with_discount
             context["total_price"] = total_price
 
         else:
             cart = self.request.session.get("cart", {})
             context["carts"] = cart.values()
             total_price = sum(item["total_price"] for item in cart.values())
+            if coupon in dict_discount.keys():
+                context["coupon"] = dict_discount[coupon]
+                discount = total_price * (int(dict_discount[coupon]) / 100)
+                total_price_with_discount = total_price - discount
+                context["total_price_with_discount"] = total_price_with_discount
 
         context["form"] = CartAddForm()
         context["total_price"] = total_price
-        print(context["carts"])
         return context
 
 
 class CartAddView(View):
     def get(self, request, *args, **kwargs):
-        product_id = kwargs.get("pk")
-        product = get_object_or_404(Sneakers, pk=product_id)
+        product_slug = kwargs.get("slug")
+        product = get_object_or_404(Sneakers, slug=product_slug)
+        selected_size = request.GET.get("selected_size")
 
         if request.user.is_authenticated:
             cart_item, created = Carts.objects.get_or_create(
                 user=request.user,
                 sneakers=product,
+                selected_size=selected_size,
                 defaults={
                     "count_cart": 1,
                     "total_price": product.price_sneakers,
@@ -235,36 +272,43 @@ class CartAddView(View):
                 cart_item.save()
         else:
             cart = request.session.get("cart", {})
-            if str(product_id) in cart:
-                cart[str(product_id)]["count"] += 1
-                cart[str(product_id)]["total_price"] += product.price_sneakers
+            categories = product.category_relations.all()
+            categories_name = " ,".join(cat.categories.category_sneakers for cat in categories)
+
+            if str(product_slug) in cart:
+                cart[str(product_slug)]["count"] += 1
+                cart[str(product_slug)]["total_price"] += product.price_sneakers
+                cart[str(product_slug)]["size"] = selected_size
             else:
-                cart[str(product_id)] = {
-                    "product_id": product_id,
+                cart[str(product_slug)] = {
+                    "product_slug": product_slug,
                     "count": 1,
                     "total_price": product.price_sneakers,
-                    "model_sneakers": product.model_sneakers,
+                    "category": categories_name,
                     "brand_sneakers": product.brand_sneakers,
                     "image_sneakers": product.image_sneakers.url if product.image_sneakers else None,
                     "price": product.price_sneakers,
+                    "assignment": product.assignment_sneakers,
+                    "color": product.color_sneakers,
+                    "size": selected_size,
                 }
             request.session["cart"] = cart
         return redirect("cart")
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get("action")
-        product_id = kwargs.get("pk")
+        product_slug = kwargs.get("slug")
         if action == "remove":
             if request.user.is_authenticated:
-                cart_item = Carts.objects.filter(user=request.user, sneakers_id=product_id)
+                cart_item = Carts.objects.filter(user=request.user, sneakers__slug=product_slug)
                 if cart_item:
                     cart_item.delete()
                 else:
                     pass
             else:
                 cart = request.session.get("cart", {})
-                if str(product_id) in cart:
-                    del cart[str(product_id)]
+                if str(product_slug) in cart:
+                    del cart[str(product_slug)]
                     request.session["cart"] = cart
         return redirect("cart")
 
@@ -296,24 +340,46 @@ class UserLogoutView(LogoutView):
 
 class WishlistAddView(View):
     def get(self, request, *args, **kwargs):
-        product_id = kwargs.get("pk")
-        product = get_object_or_404(Sneakers, pk=product_id)
+        product_slug = kwargs.get("slug")
+        product = get_object_or_404(Sneakers, slug=product_slug)
+
+        categories = product.category_relations.all()
+        categories_name = " ,".join(cat.categories.category_sneakers for cat in categories)
 
         if request.user.is_authenticated:
-            Wishlists.objects.get_or_create(
+            wish_item, created = Wishlists.objects.get_or_create(
                 user=request.user,
                 product=product,
             )
+            if not created:
+                wish_item.save()
         else:
             wishlist = request.session.get("wishlist", {})
-            wishlist[str(product_id)] = {
-                "product_id": product_id,
-                "model_sneakers": product.model_sneakers,
+            wishlist[str(product_slug)] = {
+                "product_slug": product_slug,
+                "category": categories_name,
                 "brand_sneakers": product.brand_sneakers,
                 "image_sneakers": product.image_sneakers.url if product.image_sneakers else None,
+                "assignment": product.assignment_sneakers,
                 "price": product.price_sneakers,
+                "color": product.color_sneakers,
             }
             request.session["wishlist"] = wishlist
+        return redirect("wishlist")
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        product_slug = kwargs.get("slug")
+
+        if action == "remove":
+            if request.user.is_authenticated:
+                wishlist = Wishlists.objects.filter(user=request.user, product__slug=product_slug)
+                wishlist.delete()
+            else:
+                wishlist = request.session.get("wishlist", {})
+                if str(product_slug) in wishlist:
+                    del wishlist[str(product_slug)]
+                    request.session["wishlist"] = wishlist
         return redirect("wishlist")
 
 
@@ -332,3 +398,10 @@ class WishListView(ListView):
             context["wishlist"] = wishlist.values()
 
         return context
+
+
+def debug_view(request):
+    sorted_sneakers = Sneakers.objects.filter(size_relations__size__size=41).prefetch_related("size_relations__size")
+    for sneaker in sorted_sneakers:
+        print(f"{sneaker}")
+    return render(request, "debug_tamplate.html")

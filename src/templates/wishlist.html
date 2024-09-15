@@ -11,42 +11,117 @@
                     <div class="table-main table-responsive">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>Images</th>
-                                    <th>Product Name</th>
-                                    <th>Unit Price </th>
-                                    <th>Stock</th>
-                                    <th>Add Item</th>
-                                    <th>Remove</th>
-                                </tr>
+                            <tr>
+                                <th>Images</th>
+                                <th>Category</th>
+                                <th>Brand</th>
+                                <th>Assignment</th>
+                                <th>Color</th>
+                                <th>Price</th>
+                                <th>Remove</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            {% for item in wishlist %}
-                                <tr>
-                                    <td class="thumbnail-img">
-                                        <a href="#">
-									<img class="img-fluid" src="{{ item.image_sneakers }}" alt="" />
-								</a>
-                                    </td>
-                                    <td class="name-pr">
-                                        <a href="#">
-									{{ item.model_sneakers }}-{{ item.brand_sneakers }}
-								</a>
-                                    </td>
-                                    <td class="price-pr">
-                                        <p>{{ item.price }}</p>
-                                    </td>
-                                    <td class="quantity-box">In Stock</td>
-                                    <td class="add-pr">
-                                        <a class="btn hvr-hover" href="#">Add to Cart</a>
-                                    </td>
-                                    <td class="remove-pr">
-                                        <a href="#">
-									<i class="fas fa-times"></i>
-								</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                            {% if wishlists %}
+                                {% if user.is_authenticated %}
+                                    {% for item in wishlists %}
+                                        <tr>
+                                            <td class="thumbnail-img">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    <img class="img-fluid" src="{{ item.product.image_sneakers.url }}"
+                                                         alt=""/>
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    {% for wish_relation in item.product.category_relations.all %}
+                                                        {{ wish_relation.categories.category_sneakers }}
+                                                    {% endfor %}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    {{ item.product.brand_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    {{ item.product.assignment_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    {{ item.product.color_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' item.product.slug %}">
+                                                    {{ item.product.price_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="remove-pr">
+                                                <form method="post"
+                                                      action="{% url "add_to_wishlist" item.product.slug %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="remove">
+                                                    <button type="submit" class="btn btn-link p-0">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for item in wishlist %}
+                                        <tr>
+                                            <td class="thumbnail-img">
+                                                <a href="{% url 'shop-detail' item.product_slug %}">
+                                                    <img class="img-fluid" src="{{ item.image_sneakers }}" alt=""/>
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">
+                                                    {{ item.category }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">
+                                                    {{ item.brand_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">
+                                                    {{ item.assignment }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">
+                                                    {{ item.color }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">
+                                                    {{ item.price }}
+                                                </a>
+                                            </td>
+                                            <td class="remove-pr">
+                                                <form method="POST"
+                                                      action="{% url "add_to_wishlist" item.product_slug %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="remove">
+                                                    <button type="submit" class="btn btn-link p-0">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                <h4 class="h4 text-center">
+                                    Empty wishlist
+                                </h4>
+                            {% endif %}
                             </tbody>
                         </table>
                     </div>

@@ -2398,10 +2398,16 @@
 }
  /*----------------------------*/
 
+/* Скрыть радиокнопки */
+input[type="radio"] {
+    display: none;
+}
 
-
-
-
+/* Настройка стиля для меток */
+.radio label {
+    font-size: 16px;
+    cursor: pointer;
+}
 
 
 

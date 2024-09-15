@@ -59,49 +59,37 @@
                             $ {{ sneakers.price_sneakers }}
 
                         </h5>
-                        <p class="available-stock"><span> More than 20 available / <a href="#">8 sold </a></span>
+                        <p class="available-stock"><span> More than {{ sneakers.quantity_sneakers }} available</span>
                         <p>
+                            {% for category in sneakers.category_relations.all %}
+                                <h4>Category: {{ category.categories.category_sneakers }}</h4>
+                            {% endfor %}
+
+                        <h4>Brand: {{ sneakers.brand_sneakers }}</h4>
+
+                        <h4>Assignment: {{ sneakers.assignment_sneakers }}</h4>
+
+                        <h4>Color: {{ sneakers.color_sneakers }}</h4>
+
                         <h4>Short Description:</h4>
-                        <p>Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id
-                            eros fermentum dignissim quis at tortor. Nullam ultricies urna quis sem sagittis pharetra.
-                            Nam erat turpis, cursus in ipsum at,
-                            tempor imperdiet metus. In interdum id nulla tristique accumsan. Ut semper in quam nec
-                            pretium. Donec egestas finibus suscipit. Curabitur tincidunt convallis arcu. </p>
-                        <ul>
-                            <li>
-                                <div class="form-group size-st">
-                                    <label class="size-label">Size</label>
-                                    <select id="basic" class="selectpicker show-tick form-control">
-                                        <option value="0">Size</option>
-                                        <option value="0">S</option>
-                                        <option value="1">M</option>
-                                        <option value="1">L</option>
-                                        <option value="1">XL</option>
-                                        <option value="1">XXL</option>
-                                        <option value="1">3XL</option>
-                                        <option value="1">4XL</option>
+                        <p>{{ sneakers.description_sneakers }} </p>
+                        <div class="price-box-bar">
+                            <form action="{% url 'add_to_cart' sneakers.slug %}" method="GET">
+                                <div class="form-group">
+                                    <label for="sizeSelect">Size</label>
+                                    <select id="sizeSelect" name="selected_size" class="form-control">
+                                        {% for size_relation in sneakers.size_relations.all %}
+                                            <option value="{{ size_relation.size.size }}">{{ size_relation.size.size }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
-                            </li>
-                            <li>
-                                <div class="form-group quantity-box">
-                                    <label class="control-label">Quantity</label>
-                                    <input class="form-control" value="0" min="0" max="20" type="number">
-                                </div>
-                            </li>
-                        </ul>
+                                <button type="submit" class="btn btn-danger">Add to cart</button>
+                            </form>
 
-                        <div class="price-box-bar">
-                            <div class="cart-and-bay-btn">
-                                <a class="btn hvr-hover" data-fancybox-close="" href="#">Buy New</a>
-                                <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'add_to_cart' sneakers.pk %}">Add to
-                                    cart</a>
-                            </div>
                         </div>
                         <div class="add-to-btn">
                             <div class="add-comp">
                                 <a class="btn hvr-hover" href="#"><i class="fas fa-heart"></i> Add to wishlist</a>
-                                <a class="btn hvr-hover" href="#"><i class="fas fa-sync-alt"></i> Add to Compare</a>
                             </div>
                             <div class="share-bar">
                                 <a class="btn hvr-hover" href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>

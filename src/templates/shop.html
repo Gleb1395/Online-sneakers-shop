@@ -16,7 +16,7 @@
                 <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
                     <div class="product-categori">
                         <div class="search-product">
-                            <form method="post" action="{% url 'shop' %}"" >
+                            <form method="post" action="{% url 'shop' %}">
                                 {% csrf_token %}
                                 <input class="form-control" placeholder="Search here..." type="text" name="search">
                                 <button type="submit"><i class="fa fa-search"></i></button>
@@ -106,16 +106,34 @@
                         </div>
                         <div class="filter-brand-left">
                             <div class="title-left">
-                                <h3>Model</h3>
+                                <h3>Category</h3>
                             </div>
                             <div class="brand-box">
                                 <ul>
                                     <li>
-                                        {% for model in unique_models %}
+                                        {% for category in categories %}
                                             <div class="radio radio-danger">
-                                                <a href="{% url 'shop' %}?model_sneakers={{ model }}"
+                                                <a href="{% url 'shop' %}?category={{ category }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
-                                                <label for="Radios1"> {{ model }}</label></a>
+                                                <label for="Radios1"> {{ category }}</label></a>
+                                            </div>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Assignment</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    <li>
+                                        {% for assignment in unique_assignment %}
+                                            <div class="radio radio-danger">
+                                                <a href="{% url 'shop' %}?assignment_sneakers={{ assignment }}"
+                                                <input name="survey" id="Radios1" value="Yes" type="radio">
+                                                <label for="Radios1"> {{ assignment }}</label></a>
                                             </div>
                                         {% endfor %}
                                     </li>
@@ -149,9 +167,9 @@
                                     <li>
                                         {% for size in unique_sizes %}
                                             <div class="radio radio-danger">
-                                                <a href="{% url 'shop' %}?size_sneakers={{ size }}"
+                                                <a href="{% url 'shop' %}?size={{ size.size }}"
                                                 <input name="survey" id="Radios1" value="Yes" type="radio">
-                                                <label for="Radios1"> {{ size }}</label></a>
+                                                <label for="Radios1"> {{ size.size }}</label></a>
                                             </div>
                                         {% endfor %}
                                     </li>
@@ -206,20 +224,19 @@
                                                         {% endif %}
                                                         <div class="mask-icon">
                                                             <ul>
-                                                                <li><a href="{% url "shop-detail" product.pk %}"
+                                                                <li><a href="{% url "shop-detail" product.slug %}"
                                                                        data-toggle="tooltip"
                                                                        data-placement="right" title="View"><i
                                                                         class="fas fa-eye"></i></a></li>
                                                                 <li><a href="#" data-toggle="tooltip"
                                                                        data-placement="right" title="Compare"><i
                                                                         class="fas fa-sync-alt"></i></a></li>
-                                                                <li><a href="{% url "add_to_wishlist" product.pk %}" data-toggle="tooltip"
+                                                                <li><a href="{% url "add_to_wishlist" product.slug %}"
+                                                                       data-toggle="tooltip"
                                                                        data-placement="right"
                                                                        title="Add to Wishlist"><i
                                                                         class="far fa-heart"></i></a></li>
                                                             </ul>
-                                                            <a class="cart" href="{% url "add_to_cart" product.pk %}">Add
-                                                                to Cart</a>
                                                         </div>
                                                     </div>
                                                     <div class="why-text">

@@ -12,7 +12,11 @@
                                 <thead>
                                 <tr>
                                     <th>Images</th>
-                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Brand</th>
+                                    <th>Assignment</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
@@ -24,28 +28,55 @@
                                     {% for cart in carts %}
                                         <tr>
                                             <td class="thumbnail-img">
-                                                <a href="{% url 'shop-detail' cart.sneakers.id %}">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
                                                     <img class="img-fluid" src="{{ cart.sneakers.image_sneakers.url }}"
                                                          alt=""/>
                                                 </a>
                                             </td>
                                             <td class="name-pr">
-                                                <a href="{% url 'shop-detail' cart.sneakers.id %}">
-                                                    Model:{{ cart.sneakers.model_sneakers }},
-                                                    Brand:{{ cart.sneakers.brand_sneakers }}
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {% for cat_relation in cart.sneakers.category_relations.all %}
+                                                        {{ cat_relation.categories.category_sneakers }}
+                                                    {% endfor %}
                                                 </a>
                                             </td>
-                                            <td class="price-pr">
-                                                <p>$ {{ cart.sneakers.price_sneakers }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.sneakers.brand_sneakers }}
+                                                </a>
                                             </td>
-                                            <td class="quantity-box">
-                                                <p> {{ cart.count }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.sneakers.assignment_sneakers }}
+                                                </a>
                                             </td>
-                                            <td class="total-pr">
-                                                <p>$ {{ cart.total_price|floatformat:2 }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.sneakers.color_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.selected_size }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.sneakers.price_sneakers }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.count_cart }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.sneakers.slug %}">
+                                                    {{ cart.total_price }}
+                                                </a>
                                             </td>
                                             <td class="remove-pr">
-                                                <form method="post" action="{% url "add_to_cart" cart.sneakers.id %}">
+                                                <form method="post" action="{% url "add_to_cart" cart.sneakers.slug %}">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="action" value="remove">
                                                     <button type="submit" class="btn btn-link p-0">
@@ -55,32 +86,56 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
-
-
                                 {% else %}
                                     {% for cart in carts %}
                                         <tr>
                                             <td class="thumbnail-img">
-                                                <a href="{% url 'shop-detail' cart.product_id %}">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
                                                     <img class="img-fluid" src="{{ cart.image_sneakers }}" alt=""/>
                                                 </a>
                                             </td>
                                             <td class="name-pr">
-                                                <a href="{% url 'shop-detail' cart.product_id %}">
-                                                    {{ cart.model_sneakers }} {{ cart.brand_sneakers }}
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.category }}
                                                 </a>
                                             </td>
-                                            <td class="price-pr">
-                                                <p>$ {{ cart.price }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.brand_sneakers }}
+                                                </a>
                                             </td>
-                                            <td class="quantity-box">
-                                                <p> {{ cart.count }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.assignment }}
+                                                </a>
                                             </td>
-                                            <td class="total-pr">
-                                                <p>$ {{ cart.total_price|floatformat:2 }}</p>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.color }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.size }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    $ {{ cart.price }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    {{ cart.count }}
+                                                </a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="{% url 'shop-detail' cart.product_slug %}">
+                                                    $ {{ cart.total_price|floatformat:2 }}
+                                                </a>
                                             </td>
                                             <td class="remove-pr">
-                                                <form method="post" action="{% url "add_to_cart" cart.product_id %}">
+                                                <form method="post" action="{% url "add_to_cart" cart.product_slug %}">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="action" value="remove">
                                                     <button type="submit" class="btn btn-link p-0">
@@ -100,21 +155,19 @@
                 <div class="row my-5">
                     <div class="col-lg-6 col-sm-6">
                         <div class="coupon-box">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control" placeholder="Enter your coupon code"
-                                       aria-label="Coupon code" type="text">
-                                <div class="input-group-append">
-                                    <button class="btn btn-theme" type="button">Apply Coupon</button>
+                            <form action="{% url 'cart' %}" method="GET">
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control" name="coupon" placeholder="Enter your coupon code"
+                                           aria-label="Coupon code" type="text">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-theme" type="submit">Apply Coupon</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-6">
-                        <div class="update-box">
-                            <input value="Update Cart" type="submit">
+                            </form>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="row my-5">
                     <div class="col-lg-8 col-sm-12"></div>
@@ -125,23 +178,21 @@
                                 <h4>Sub Total</h4>
                                 <div class="ml-auto font-weight-bold"> $ {{ total_price|floatformat:2 }}</div>
                             </div>
-                            <div class="d-flex">
-                                <h4>Discount</h4>
-                                <div class="ml-auto font-weight-bold"> $ 40</div>
-                            </div>
+
                             <hr class="my-1">
                             <div class="d-flex">
                                 <h4>Coupon Discount</h4>
-                                <div class="ml-auto font-weight-bold"> $ 10</div>
+                                <div class="ml-auto font-weight-bold"> $ {{ coupon }}</div>
                             </div>
-                            <div class="d-flex">
-                                <h4>Shipping Cost</h4>
-                                <div class="ml-auto font-weight-bold"> Free</div>
-                            </div>
+
                             <hr>
                             <div class="d-flex gr-total">
                                 <h5>Grand Total</h5>
-                                <div class="ml-auto h5"> $ 388</div>
+                                {% if total_price_with_discount %}
+                                    <div class="ml-auto h5"> $ {{ total_price_with_discount|floatformat:2 }}</div>
+                                {% else %}
+                                    <div class="ml-auto h5"> $ {{ total_price|floatformat:2 }}</div>
+                                {% endif %}
                             </div>
                             <hr>
                         </div>
@@ -164,7 +215,11 @@
                                 <thead>
                                 <tr>
                                     <th>Images</th>
-                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Brand</th>
+                                    <th>Assignment</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
@@ -205,29 +260,19 @@
                             <h3>Order summary</h3>
                             <div class="d-flex">
                                 <h4>Sub Total</h4>
-                                <div class="ml-auto font-weight-bold"> $ 130</div>
-                            </div>
-                            <div class="d-flex">
-                                <h4>Discount</h4>
-                                <div class="ml-auto font-weight-bold"> $ 40</div>
+                                <div class="ml-auto font-weight-bold"> $ 0</div>
                             </div>
                             <hr class="my-1">
                             <div class="d-flex">
                                 <h4>Coupon Discount</h4>
-                                <div class="ml-auto font-weight-bold"> $ 10</div>
+                                <div class="ml-auto font-weight-bold"> $ 0</div>
                             </div>
-                            <div class="d-flex">
-                                <h4>Tax</h4>
-                                <div class="ml-auto font-weight-bold"> $ 2</div>
-                            </div>
-                            <div class="d-flex">
-                                <h4>Shipping Cost</h4>
-                                <div class="ml-auto font-weight-bold"> Free</div>
-                            </div>
+
+
                             <hr>
                             <div class="d-flex gr-total">
                                 <h5>Grand Total</h5>
-                                <div class="ml-auto h5"> $ 388</div>
+                                <div class="ml-auto h5"> $ 0</div>
                             </div>
                             <hr>
                         </div>
